@@ -1,91 +1,187 @@
 {
-  "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "GPT Chatbot API",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/favicon.png",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#2E3F51",
+    "light": "#516F90",
+    "dark": "#0D001D",
+    "background": {
+      "dark": "#111827"
+    },
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#ED727B",
+      "to": "#F6B7BB"
     }
   },
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:info@gptchatbot.it"
     }
   ],
-  "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+  "primaryTab": {
+    "name": "Documentation"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "name": "API References",
+      "icon": "code",
+      "url": "api-reference"
     },
     {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "name": "Tools",
+      "icon": "gear",
+      "api": {
+        "baseUrl": "https://tools.gptchatbot.it/",
+        "auth": {
+          "method": "bearer"
+        }
+      },
+      "url": "tools"
     },
     {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "name": "Whitelabel",
+      "icon": "browser",
+      "url": "whitelabel"
     }
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Getting Started",
+      "pages": ["introduction"]
+    },
+    {
+      "group": "Guides",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
+        "creating-first-chatbot",
+        "lead-collection",
+        "human-support-escalation",
+        "inbox-notifications",
+        "conversation-labeling",
+        "multi-agents-chatbot",
+        "fine-tuning-agent-intents",
+        "supervisor-overrides",
+        "byok-pricing-guide",
+        "working-with-tables",
+        "best-practices",
+        "help"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Function Calling",
+      "pages": ["rag-from-external-data-provider"]
+    },
+    {
+      "group": "API Usage Guides",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "api-reference/api-key-setup",
+        "api-reference/guide-00-chatbot-create",
+        "api-reference/guide-01-chat",
+        "api-reference/guide-02-source"
       ]
     },
     {
-      "group": "API Documentation",
+      "group": "Authentication Webhook",
+      "pages": ["user-identity"]
+    },
+    {
+      "group": "Chatbots",
       "pages": [
-        "api-reference/introduction"
+        "api-reference/chatbots/properties-reference",
+        "api-reference/chatbots/create",
+        "api-reference/chatbots/update",
+        "api-reference/chatbots/fetch",
+        "api-reference/chatbots/fetch_multi",
+        "api-reference/chatbots/delete"
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Agents",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "api-reference/agents/properties-reference",
+        "api-reference/agents/create",
+        "api-reference/agents/update",
+        "api-reference/agents/fetch_multi",
+        "api-reference/agents/delete"
+      ]
+    },
+    {
+      "group": "Chatbot Sessions",
+      "pages": [
+        "api-reference/sessions/properties-reference",
+        "api-reference/sessions/create",
+        "api-reference/sessions/fetch",
+        "api-reference/sessions/fetch_multi",
+        "api-reference/sessions/delete",
+        "api-reference/sessions/delete_multi"
+      ]
+    },
+    {
+      "group": "Session Messages",
+      "pages": [
+        "api-reference/messages/properties-reference",
+        "api-reference/messages/create",
+        "api-reference/messages/fetch_multi",
+        "api-reference/messages/delete",
+        "api-reference/messages/delete_multi"
+      ]
+    },
+    {
+      "group": "Data Sources",
+      "pages": [
+        "api-reference/data-sources/properties-reference",
+        "api-reference/data-sources/create-file",
+        "api-reference/data-sources/create-qa",
+        "api-reference/data-sources/create-url",
+        "api-reference/data-sources/update",
+        "api-reference/data-sources/fetch_multi",
+        "api-reference/data-sources/retrain",
+        "api-reference/data-sources/delete",
+        "api-reference/data-sources/delete_multi"
+      ]
+    },
+    {
+      "group": "Data Source Tags",
+      "pages": [
+        "api-reference/source-tags/create",
+        "api-reference/source-tags/fetch-multi",
+        "api-reference/source-tags/update",
+        "api-reference/source-tags/delete"
+      ]
+    },
+    {
+      "group": "Tool Guides",
+      "pages": ["tools/tools-intro"]
+    },
+    {
+      "group": "Tools",
+      "pages": ["tools/weekday"]
+    },
+    {
+      "group": "Whitelabel Dashboard",
+      "pages": [
+        "whitelabel/whitelabel-intro",
+        "whitelabel/whitelabel-plans",
+        "whitelabel/whitelabel-users"
+      ]
+    },
+    {
+      "group": "Integrations",
+      "pages": [
+        "whitelabel/whitelabel-zapier",
+        "whitelabel/whitelabel-make",
+        "whitelabel/whitelabel-meta"
       ]
     }
   ],
-  "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://linkedin.com/company/mintlify"
+  "api": {
+    "baseUrl": "https://app.gptchatbot.it/api",
+    "auth": {
+      "method": "bearer"
+    }
   }
 }
