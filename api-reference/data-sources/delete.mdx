@@ -1,0 +1,72 @@
+---
+title: "Delete Source"
+api: "POST https://app.gptchatbot.it/api/v1/data-source/{uuid}/delete"
+description: "Delete single source base on uuid"
+---
+
+### Path
+
+<ParamField path="uuid" type="string" required/>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if api call was successful
+</ResponseField>
+
+
+<RequestExample>
+
+```bash Curl
+curl --location --request POST 'https://app.gptchatbot.it/api/v1/data-source/{uuid}/delete' \
+--header 'Authorization: Bearer <token>'
+```
+
+```py Python
+import requests
+
+uuid = '<source-uuid>'
+url = f'https://app.gptchatbot.it/api/v1/data-source/{uuid}/delete'
+headers = {
+    'Authorization': 'Bearer <token>'
+}
+
+response = requests.POST(url, headers=headers)
+
+if response.status_code == 200:
+    print("Request successful! Source deleted.")
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require('axios');
+
+const uuid = '<source-uuid>'
+const url = `https://app.gptchatbot.it/api/v1/data-source/${uuid}/delete`;
+const headers = {
+    'Authorization': 'Bearer <token>'
+};
+
+axios.post(url, { headers })
+    .then(response => {
+        console.log('Request successful! SOurce deleted.');
+    })
+    .catch(error => {
+        console.error('Request failed:', error);
+    });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true
+}
+
+```
+
+</ResponseExample>

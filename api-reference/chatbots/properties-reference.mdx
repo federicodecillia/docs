@@ -1,0 +1,36 @@
+---
+title: "Chatbot Properties"
+description: "Detailed explanation of chatbot's properties"
+---
+
+<ParamField body="uuid" type="string">
+  Unique Id of the chatbot
+</ParamField>
+<ParamField body="name" type="string">
+  This is the name you use to refer to the chatbot in your list of chatbots. It is not visible anywhere on the chatbot.
+</ParamField>
+<ParamField body="visibility" type="select">
+ <p><span className="font-medium">Private</span>: No one can access your chatbot except you (your account).</p>
+  <p><span className="font-medium">Public</span>: Anyone with the link can access it on <strong>gptchatbot.it</strong>, and can be embedded on your website.</p>
+  <p><span className="font-medium">Hybrid</span>: Can be embedded on your website, but no link sharing allowed.</p>
+  Options are <code>private</code>, <code>public</code>, <code>hybrid</code>
+</ParamField>
+<ParamField body="rate_limit" type="[number, number]">
+  Limit the number of messages sent from one device on the iframe and chat bubble (this limit will not be applied to you on GPT Chatbot, only on websites for your users to prevent abuse).
+  <p><span className="font-medium">First number</span>: amount of messages.</p> Min <code>1</code> - Max <code>100</code>
+  <p><span className="font-medium">Second number</span>: amount of seconds.</p> Min <code>1</code> - Max <code>360</code>
+</ParamField>
+<ParamField body="rate_limit_message" type="string">
+  Message to show when rate limit is reached
+</ParamField>
+<ParamField body="show_citations" type="boolean">
+  Our AI bot credits sources and includes links to specific information it used from 
+  your trained data, promoting a reliable and informed conversation.
+</ParamField>
+<ParamField body="modified_at" type="string">
+  Indicates chatbot modified time
+</ParamField>
+<ParamField body="created_at" type="string">
+  Indicates chatbot creation time
+</ParamField>
+

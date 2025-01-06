@@ -1,0 +1,25 @@
+---
+title: "Session Properties"
+description: "Detailed explanation of sessions's properties"
+---
+
+<ParamField body="uuid" type="string">
+  Unique Id of the session
+</ParamField>
+<ParamField body="modified_at" type="string">
+  Indicates session modified time
+</ParamField>
+<ParamField body="created_at" type="string">
+  Indicates session creation time
+</ParamField>
+<ParamField body="meta" type="meta Object">
+  Session meta properties
+  <Expandable title="properties">
+    <ParamField body="user" type="user Object">
+      Exists when lead form was submitted by user
+    </ParamField>
+    <ParamField body="auth_data" type="auth_data Object">
+      Exists when user completes "User Identity Verification" and "Save Data on Success" feature is enabled
+    </ParamField>
+  </Expandable>
+</ParamField>

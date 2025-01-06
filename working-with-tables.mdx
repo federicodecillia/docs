@@ -1,0 +1,94 @@
+---
+title: Working with Tables and CSV
+---
+
+GPT Chatbot allows you to upload training data in the form of **simple** CSV or Excel tables.
+Simple tables refer to tabulated data that do not contain merged cells, have a single primary 
+key column with unique elements, unique and informative column / row titles, and either 
+column-wise or row-column structural configurations.
+
+Example column-only simple table:
+
+<Frame>
+  <img src="/images/working-with-tables-1.png" />
+</Frame>
+
+_Data across each row corresponds to a single product key in the first column_
+
+Example row / column simple table:
+
+<Frame>
+  <img src="/images/working-with-tables-2.png" />
+</Frame>
+
+_Each row-column combination points to a corresponding cell value._
+
+While there is no maximum number of columns, there is a limit to the total number of tokens that can 
+be included within each row of the table. If you exceed that, the training will result in an error. 
+As of March 2024, the maximum number of tokens per row is ~8000 tokens (this number includes non-cell-value 
+JSON code used to represent table structure, so actual maximum reserved for cell-values is lower 
+and depends on column / row name lengths).
+
+If your data matches the format above, you can proceed to upload your table onto GPT Chatbot as a
+training source. To do so, simply go to Sources -> Add Sources -> Tables:
+
+<Frame>
+  <img src="/images/working-with-tables-3.png" />
+</Frame>
+
+For row-column tables, after you upload it, select it and go to the three-dot-menu on the rightmost 
+edge and click “Edit Table Data”:
+
+<Frame>
+  <img src="/images/working-with-tables-4.png" />
+</Frame>
+
+Then, in the table edit dialog, select “Row-Column Header” and click “Save Changes”. This ensures that 
+your data is pre-processed correctly for LLM understanding.
+
+<Frame>
+  <img src="/images/working-with-tables-5.png" />
+</Frame>
+
+You can then set the tables as referenced data when assigning knowledge base to your Agents.
+
+Please note that based on our experience, GPT-4 series significantly outperform GPT-3.5 series in 
+retrieval accuracy and consistency when working with tables.
+
+<Frame>
+  <img src="/images/working-with-tables-6.png" />
+</Frame>
+
+_Example LLM retrieval using the sample tables above._
+
+## My Agent or chatbot doesn’t seem to understand or interpret my table correctly!
+
+Large language models (LLMs) like GPT-4 are extremely adept at working with unstructured text data. 
+With a multimodal training method, LLMs can even interpret visual or image data and associate it with natural 
+language (like GPT-Vision). However, tabulated data is very different. There is no universal rule set or 
+standard language patterns when it comes to representing structured information. Given the probabilistic nature 
+of LLMs, they are not innately proficient at handling this type of data directly.
+
+An article from [Microsoft Research](https://www.microsoft.com/en-us/research/blog/improving-llm-understanding-of-structured-data-and-exploring-advanced-prompting-methods/) 
+recently evaluated GPT-4’s performance when processing structured data. Within it, model performance against 
+numerous programmatic representations of structured data are discussed.
+
+<Frame>
+  <img src="/images/working-with-tables-7.png" />
+</Frame>
+
+_Comparing GPT-3.5 vs. GPT-4 performance across a variety of table operations and structured data representations._
+_Source: https://www.microsoft.com/en-us/research/blog/improving-llm-understanding-of-structured-data-and-exploring-advanced-prompting-methods/_
+
+GPT Chatbot currently uses a version of JSON to handle tables. While not perfect, it does support a limited range
+of use cases when bot makers want to train chatbots with structured data.
+
+We understand that many use cases involve much larger and more complex datasets that may even be updated in real-time. 
+The static table feature within GPT Chatbot is not optimized for them, and we instead recommend that you look into
+function-calling.
+
+The most robust and "legitimate" way to do retrieval augmented generation (RAG) on structured data is via function calling, 
+where you design and host custom functions with **templated** SQL queries to retrieve specific data snippets and feed it to 
+your GPT Chatbot chatbot as additional RAG context on-demand. However, this requires a bit of programming and server hosting
+setup on your end. We are working on some concrete examples of this setup, so we appreciate your patience as we improve our 
+documentation.

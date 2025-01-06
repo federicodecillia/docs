@@ -1,0 +1,92 @@
+---
+title: "Fetch all Messages"
+api: "GET https://app.gptchatbot.it/api/v1/session/{uuid}/messages"
+description: "Fetch the list of messages for a session specified by session uuid"
+---
+
+### Path
+
+<ParamField path="uuid" type="string" required/>
+
+### Response
+
+<ResponseField name="" type="object[]">
+Message list
+<Expandable title="Message properties">
+<ResponseField name="uuid" type="string"/>
+<ResponseField name="created_at" type="string"/>
+<ResponseField name="modified_at" type="string"/>
+<ResponseField name="finish_reason" type="string"/>
+<ResponseField name="cite_data_json" type="string"/>
+<ResponseField name="meta_json" type="string"/>
+<ResponseField name="query" type="string"/>
+<ResponseField name="response" type="string"/>
+</Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash Curl
+curl --location --request GET 'https://app.gptchatbot.it/api/v1/session/{uuid}/messages' \
+--header 'Authorization: Bearer <token>'
+```
+
+```py Python
+import requests
+
+uuid = '<session-uuid>'
+url = f'https://app.gptchatbot.it/api/v1/session/{uuid}/messages'
+headers = {
+    'Authorization': 'Bearer <token>'
+}
+
+response = requests.get(url, headers=headers)
+
+if response.status_code == 200:
+    print("Request successful!")
+    print(response.json())
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require('axios');
+
+const uuid = '<session-uuid>'
+const url = `https://app.gptchatbot.it/api/v1/session/${uuid}/messages`;
+const headers = {
+    'Authorization': 'Bearer <token>'
+};
+
+axios.get(url, { headers })
+    .then(response => {
+        console.log('Request successful!');
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error('Request failed:', error);
+    });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+[
+  {
+    "cite_data_json": "string",
+    "created_at": "string",
+    "finish_reason": "string",
+    "meta_json": "string",
+    "modified_at": "string",
+    "query": "string",
+    "response": "string",
+    "uuid": "string"
+  }
+]
+
+```
+
+</ResponseExample>

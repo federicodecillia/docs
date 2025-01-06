@@ -1,0 +1,86 @@
+---
+title: "Create Session"
+api: "POST https://app.gptchatbot.it/api/v1/chatbot/{uuid}/session/create"
+description: "Create a chat session for a chatbot specified by chatbot uuid"
+---
+
+### Body
+
+<ParamField body="initial_variables" type="object">
+  Used to pass initial data as a flat object with only one level of depth, which
+  you want to store and reuse later.
+</ParamField>
+
+### Path
+
+<ParamField path="uuid" type="string" required />
+
+### Response
+
+<ResponseField name="created_at" type="string" required />
+<ResponseField name="modified_at" type="string" required />
+<ResponseField name="uuid" type="string" required />
+<ResponseField name="initial_variables" type="object" />
+
+<RequestExample>
+
+```bash Curl
+curl --location --request POST 'https://app.gptchatbot.it/api/v1/chatbot/{uuid}/session/create' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+```
+
+```py Python
+import requests
+
+uuid = '<chatbot-uuid>'
+url = f'https://app.gptchatbot.it/api/v1/chatbot/{uuid}/session/create'
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+}
+
+response = requests.post(url,  headers=headers)
+
+if response.status_code == 200:
+    print("Request successful!")
+    print(response.json())
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require("axios");
+
+const uuid = "<chatbot-uuid>";
+const url = `https://app.gptchatbot.it/api/v1/chatbot/${uuid}/session/create`;
+const headers = {
+  "Content-Type": "application/json",
+  Authorization: "Bearer <token>",
+};
+
+axios
+  .post(url, { headers })
+  .then((response) => {
+    console.log("Request successful!");
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "created_at": "string",
+  "modified_at": "string",
+  "uuid": "string"
+}
+```
+
+</ResponseExample>

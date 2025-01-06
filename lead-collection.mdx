@@ -1,0 +1,112 @@
+---
+title:  Lead Collection
+---
+
+There are two ways to collect data from users when they engage with your AI Chat.
+
+1. Through a form
+2. Conversationally
+
+There are pros and cons for each approach. Forms are easier to set up and is programmatic, but collecting information conversationally is more
+natural and engaging despite the added complexity. You can send any collected data via webhook to a CRM as soon as your user submits it.
+
+## Collecting data through a form
+
+To add a form to your AI Chat, go to Customizations tab on the left navigation menu, then scroll down until you see the "Form" section.
+You can select one of the default fields you'd like to include in the form. Alternatively, you can create custom fields.
+
+<Frame>
+  <img src="/images/lead-collection-14.png" />
+</Frame>
+
+For custom fields, you can change the field types (text, dropdown, checkbox). You can also make certain fields mandatory. If at least one field is
+mandatory, you will also gain the option to make the entire form mandatory before the user can proceed with chatting. Making the form mandatory
+will cause the "x" button on the top right of the form to disappear, thereby preventing users from closing the form before completing it.
+
+<Frame>
+  <img src="/images/lead-collection-15.png" />
+</Frame>
+
+## Collecting data conversationally
+
+If you want to maintain a natural conversational flow and collect data from users directly, you will have to configure your AI Agent(s) prompt and
+set up variables to store the collected information.
+
+### Editing the prompt
+
+The behavior of your AI Chat is governed by your AI Agent(s)'s prompt. To review and edit the prompt, go to AI Agents
+tab on the left navigation menu, then click on the Agent you'd like to edit.
+
+<Note>
+  If you created your AI Chat using a template, then you may be using a default
+  prompt we generated for you. If this is the first time you are configuring an
+  AI Agent prompt, we recommend you to read our Prompt Engineering guide for
+  best practices.
+</Note>
+
+<Frame>
+  <img src="/images/lead-collection-17.png" />
+</Frame>
+
+Configure your prompt to include detailed instructions for collecting user data. Make sure you cover when, what, and how. For example, here is a snippet
+that can serve as a guide:
+
+```
+### Instructions
+- When engaging with the user for the first time, politely ask for their first name.
+- Once the user provides their first name, proceed with the following steps to collect their contact information.
+- Ask for the user's mobile telephone number after collecting their first name.
+- After the mobile telephone number is collected, ask for their e-mail address.
+- If the user is not comfortable providing any particular piece of information, do not force them. Respect their decision.
+```
+
+But this only directs the AI to ask for information from the user. We still need a way to store the collected information. Next, we'll teach you how to store
+the collected data into variables.
+
+### Setting up variables
+
+Go to Customizations tab on right navigation bar, then scroll down until you see "User Data Collection". Click to expand it.
+
+<Frame>
+  <img src="/images/lead-collection-18.png" />
+</Frame>
+
+Inside, you can create variables to store information that is collected from the user during the conversation. You can set up multiple variables, each corresponding
+to a single piece of information. When setting up a variable, please provide the variable name, description, and example values. Try to be as detailed and explicit
+as possible.
+
+<Frame>
+  <img src="/images/lead-collection-19.png" />
+</Frame>
+
+_The more examples you provide, the better it is for the AI to understand the format you're looking for._
+
+Make sure to define enough variables to store all the information you are requesting from the user. In the example prompt snippet above, you would need the user's name,
+phone, and email.
+
+Once everything has been set up, you can test the AI Chat in preview mode. If everything works as intended, you should see the data being collected in your inbox every
+time a user engages meaningfully with your AI Chat.
+
+<Note>
+  Variable values can change if the user specifies that they want to make a
+  correction or update. The AI is generally good at understanding the correct
+  value to assign.
+</Note>
+
+## Sending data to your CRM
+
+Regardless of whether you want to collect data using a form or conversationally, you may wish to send that information to another CRM for follow up. GPT Chatbot supports
+webhooks with smart triggers that can alert you to new leads as soon as they engage with the AI.
+
+Go to Customizations tab on the left navigation menu. Then scroll down to "Webhook". Click to expand it.
+
+<Frame>
+  <img src="/images/lead-collection-21.png" />
+</Frame>
+
+If you are using a form, then you can select the "Form Submission" event and specify the API endpoint where you want the collected data to be sent (POST request).
+
+If you are using variables to store user data, then you can select the "Data Collection" event and choose the variables you'd like to be sent. **Please note that the webhook
+will only be triggered if all your designated variables have been collected (must not be empty).**
+
+If you want certain variables to be optional, then you can give it a default value during variable setup. This way, it will always be in a populated state and never empty.

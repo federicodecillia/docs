@@ -1,0 +1,337 @@
+---
+title: RAG from an External Data Provider
+---
+
+Uploading static sources as training data for your AI Agents is well and good, but what if your database is huge, structured, externally-hosted, 
+or updated in real-time? There is no way to dump the entire database into GPT Chatbot’s static knowledge library and still maintain a live link…
+
+This is where function-calling comes in. Through function-calling, you can serve data on-demand to your AI Agent in GPT Chatbot during a live
+conversation session. To show you how, we walk you through an example of RAG enrichment using (abstracts of) academic papers sourced from a trusted 
+academic papers aggregator: Semantic Scholar API.
+
+## Setting up and testing the function
+
+First, you’ll need an API key from your external data provider, whoever that may be, assuming they have a secure API. In our case, we requested one 
+from [Semantic Scholar](https://www.semanticscholar.org/) directly.
+
+Since we want to enrich our LLM query response with relevant information from academic research, we need to find the appropriate API endpoint to 
+conduct the search. Semantic Scholar offers nice [documentation](https://api.semanticscholar.org/api-docs/graph#tag/Paper-Data/operation/get_graph_paper_relevance_search) 
+in that regard.
+
+<Frame>
+  <img src="/images/fc-external-database-api-1.png" />
+</Frame>
+
+So what does this API endpoint respond with?
+
+To inspect the output, we ran a script that makes a request to the API based on hardcoded input parameters. The source code of our script is included 
+below. You will need your own Semantic Scholar API key if you wish to run it yourself. For our example, we ran a search for relevant papers on the topic 
+of “Multifidelity Optimization” and “Gaussian Processes”.
+
+```python
+import requests
+import json
+import os
+
+# Set up the headers with the API key
+headers = {
+    'X-API-KEY': "YOUR OWN API KEY"
+}
+
+# Specify the fields you want to fetch for each recommended paper
+fields = "paperId,title,authors,abstract,url,referenceCount"
+
+# Define the limit for the number of recommendations to return
+limit = 20
+
+# Make the request to get paper recommendations
+response = requests.get(
+    'https://api.semanticscholar.org/graph/v1/paper/search',
+    headers=headers,
+    # json=payload,
+    params={'fields': fields, 'limit': limit, 'query':'multifidelity optimization, gaussian processes' }
+)
+
+# Check if the request was successful
+if response.status_code == 200:
+    print(json.dumps(response.json(), indent=2))
+else:
+    print(f"Error: {response.status_code}")
+    # It's better to print response.text for non-200 responses, as they may not be in JSON format
+    print(response.text)
+```
+
+The output we received looks like follows:
+
+
+```json
+{
+  "total": 12096,
+  "offset": 0,
+  "next": 20,
+  "data": [
+    {
+      "paperId": "b108e6e11f4a96d5058945f3b582a032e8204ade",
+      "url": "https://www.semanticscholar.org/paper/b108e6e11f4a96d5058945f3b582a032e8204ade",
+      "title": "Multifidelity Gaussian processes for failure boundary andprobability estimation",
+      "abstract": "Estimating probability of failure in aerospace systems is a critical requirement for flight certification and qualification. Failure probability estimation (FPE) involves resolving tails of probability distribution and Monte Carlo (MC) sampling methods are intractable when expensive high-fidelity simulations have to be queried. We propose a method to use models of multiple fidelities, which trade accuracy for computational efficiency. Specifically, we propose the use of multifidelity Gaussian process models to efficiently fuse models at multiple fidelity. Furthermore, we propose a novel acquisition function within a Bayesian optimization framework, which can sequentially select samples (or batches of samples for parallel evaluation) from appropriate fidelity models to make predictions about quantities of interest in the highest fidelity. We use our proposed approach within a multifidelity importance sampling (MFIS) setting, and demonstrate our method on the failure level set estimation on synthetic test functions as well as the transonic flow past an airfoil wing section.",
+      "referenceCount": 49,
+      "authors": [
+        {
+          "authorId": "98543101",
+          "name": "Ashwin Renganathan"
+        },
+        {
+          "authorId": "144321616",
+          "name": "Vishwas Rao"
+        },
+        {
+          "authorId": "143672238",
+          "name": "Ionel M. Navon"
+        }
+      ]
+    },
+    {
+      "paperId": "963a5c60ada159d27641a284008f57d6419b26f2",
+      "url": "https://www.semanticscholar.org/paper/963a5c60ada159d27641a284008f57d6419b26f2",
+      "title": "Generative Transfer Optimization for Aerodynamic Design",
+      "abstract": "Transfer optimization, one type of optimization methods, which leverages knowledge of the completed tasks to accelerate the design progress of a new task, has been in widespread use in machine learning community. However, when applying transfer optimization to accelerate the progress of aerodynamic shape optimization (ASO), two challenges are encountered in sequence, that is, (1) how to build a shared design space among the related aerodynamic design tasks, and (2) how to exchange information between tasks most efficiently. To address the first challenge, a datadriven generative model is used to learn airfoil representations from the existing database, with the aim of synthesizing various airfoil shapes in a shared design space. To address the second challenge, both singleand multifidelity Gaussian processes (GPs) are employed to carry out optimization. On one hand, the multifidelity GP is used to leverage knowledge from the completed tasks. On the other hand, mutual learning is established between singleand multifidelity GP models by exchanging information between them in each optimization cycle. With the above, a generative transfer optimization (GTO) framework is proposed to shorten the design cycle of aerodynamic design. Through airfoil optimizations at different working conditions, the effectiveness of the proposed GTO framework is demonstrated.",
+      "referenceCount": 16,
+      "authors": [
+        {
+          "authorId": "2149505113",
+          "name": "Zhendong Guo"
+        },
+        {
+          "authorId": "2153199285",
+          "name": "Wei Sun"
+        },
+        {
+          "authorId": "50258957",
+          "name": "Liming Song"
+        },
+        {
+          "authorId": "46276037",
+          "name": "Jun Yu Li"
+        },
+        {
+          "authorId": "73325644",
+          "name": "Z. Feng"
+        }
+      ]
+    },
+… (truncated due to length)
+```
+
+The Semantic Scholar function returned the top 20 matching results ranked by relevance based on our input parameter specification. As you see, the response 
+can get quite long, so we truncated the output for conciseness.
+
+Ideally, you want a structured JSON response from the function’s output like what we showed above.
+
+We ran our own analysis for this particular API endpoint (with the specific set of output fields we requested) and found that on average, each returned 
+result is between 400-500 tokens long. This means that depending on the token limit we reserved for the function output, we can only fit so many search results 
+in before running out of space. Keep this in mind as you prioritize the information you wish to supply to the LLM during RAG.
+
+Now we know what the LLM would see as additional context provided by the function call, we can start linking it to our GPT Chatbot Agent.
+
+<Note>
+It is ALWAYS advisable to write your own script and test for the output of the API endpoint first. You want to know exactly what kind information 
+is being fed into your AI Agent.
+</Note>
+
+## Create and prepare the AI Agent
+
+In your chatbot inside GPT Chatbot, you must first create an appropriate AI Agent that you plan to give this function-calling capability to. In our example,
+we created “The Professor”. We then defined an associated Agent description and base prompt.
+
+<Frame>
+  <img src="/images/fc-external-database-api-2.png" />
+</Frame>
+
+We picked the GPT-4-0125-8k Model for this example. You can see our simple prompt in the screenshot below.
+
+<Frame>
+  <img src="/images/fc-external-database-api-3.png" />
+</Frame>
+
+Next, we save the Agent and go to the “Knowledge” tab to disable static RAG from the chatbot’s own knowledge library. This is only necessary if you don’t want 
+to use any training data from the static sources list. In our example, we didn’t upload any training data anyways, but we do this as standard practice to keep 
+things clean.
+
+<Frame>
+  <img src="/images/fc-external-database-api-4.png" />
+</Frame>
+
+Save the Agent. 
+
+## Function setup
+
+Within your Agent, head over to the “Functions” tab. Change the “Response Context Limit” to the maximum allowed. Then click “Add function”.
+
+<Frame>
+  <img src="/images/fc-external-database-api-5.png" />
+</Frame>
+
+This is where you tell the LLM exactly what the function does and how it works. The LLM will then decide on its own whether it needs the function when responding 
+to the user during a conversation, then call it with the appropriate parameters as needed.
+
+<Frame>
+  <img src="/images/fc-external-database-api-6.png" />
+</Frame>
+
+The function name and description are particularly useful in helping the AI understand what the function does. Please make sure to be as explicit as possible in 
+your own definition. The function description must be less than 1024 characters, including spaces. In our case, we wrote the following:
+
+```
+Function name: paper_relevance_search
+
+Function description: 
+This function searches Semantic Scholar, a scholarly literature database. The input parameters will be defined based on extracted information from conversation context. It will return search results containing academic paper metadata (with abstracts) in a JSON format.
+The returned fields are defined as follows:
+- title: paper title
+- abstract: paper abstract
+- paperId: paper uuid
+- authors: paper authors
+- year: paper publication year
+- url: paper link
+- referenceCount: number of references included in the paper
+- citationCount: number of citations of this paper
+```
+
+Next, define the API endpoint. The Semantic Scholar endpoint we are using is simple and straighforward:
+
+```
+https://api.semanticscholar.org/graph/v1/paper/search
+```
+
+After that, choose the HTTP method. We use “GET” for our example. The specific API endpoint you are using should have documentation about this distinction.
+
+## Fixed parameters 
+
+Static (Fixed) Parameters remain constant across all API requests. They are pre-defined and reflect settings or configurations that do not change with each 
+call. For example, parameters that specify the format of the response or that enable/disable certain features globally across all API interactions fall into 
+this category. The term “static” emphasizes their unchanging nature.
+
+Depending on your particular API endpoint, you may need to append some fixed parameters in the URL. The API we use above from Semantic Scholar does not require 
+fixed parameters. But if you are using a more complex endpoint like this: 
+https://app.outscraper.com/api-docs#tag/Businesses-and-POI/paths/~1maps~1search-v3/get, then your API endpoint may include fixed parameters and look something like:
+
+```
+https://api.app.outscraper.com/maps/search-v3?async=false&fields=name,full_address,phone,site
+```
+
+Notice that at the end of "https://api.app.outscraper.com/maps/search-v3", we get into fixed parameters. This is where you define parameters that will not change 
+when the function is called. Always define fixed parameters this way!
+
+<Note>
+If your API is capable of returning a more concise response by configuring certain parameters (i.e., tell the API to leave out unnecessary metadata in the response), 
+then we highly suggest that you do so. It will reduce token waste and help AI understand the context better. In the above example, we set "fields=name,full_address,phone,site" 
+specifically to limit the response so that it contains only name, full_address, phone, and site information - and nothing else.
+</Note>
+
+## Headers and Authentication
+
+In general, secure public-facing APIs require authentication. Semantic Scholar is the same. In the Header, we provide our API key. The specific key field used 
+to supply your authentication token will differ based on the particular API you use, so please make sure to be informed on your API provider’s documentation. 
+For our example, the key field is named “x-api-key”:
+
+<Frame>
+  <img src="/images/fc-external-database-api-7.png" />
+</Frame>
+
+## Variable parameters
+
+Finally, we get to variable parameters.
+
+Variable (Dynamic) Parameters dynamically change based on user input or conversation context, unlike their static counterparts. In function calling, these parameters 
+adapt to the specifics of each request, being determined at runtime. This ensures that API calls made by the AI are tailored to the immediate needs of the conversation, 
+enabling a more personalized and relevant interaction. The AI extracts these parameters directly from the dialogue, determining when and how to call the function 
+based on the ongoing conversation.
+
+For our function, we define the following variable parameters:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "string",
+      "description": "The keywords, author names or exact paper IDs to search for"
+    },
+    "fields": {
+      "type": "string",
+      "description": "The information to be returned, default as 'title,abstract,paperId,authors,year,url,referenceCount,citationCount'"
+    },
+    "limit": {
+      "type": "string",
+      "description": "The number of papers users want to get, default as 2. Use the default for all cases."
+    }
+  },
+  "required": [
+    "query"
+  ]
+}
+
+```
+
+Notice that this is a structured JSON format. Under the key field “type” of the entire parameter-set, we put “object”. You should do the same for yours.
+
+Under properties, you define each parameter along with their type and description. Take “query” for example. It has type String, meaning its data type is free text. 
+Types can be “String”, “integer”, “boolean”, “array”, etc. The description is more open-ended, but also extremely important. This is where you must tell 
+the LLM what this parameter represents. To the best of your ability, provide default values and examples of actual parameter values when the function is called. 
+
+Try to be as explicit as possible. Remember that if the AI has to guess whether a parameter named 'language' should take 'en' or 'english' as input, chances are 
+it will guess wrong, and you will see errors in your chatbot output. 
+
+Depending on the function you are working with, input parameters can get pretty complex. Below is another example for supplying parameters to a function (NOT related 
+to our Semantic Scholar example) that uses an array:
+
+```json
+{
+    "type": "object",
+    "properties": {
+        "tags": {
+            "type": "array",
+            "description": "labels that should be assigned to the user’s request",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the label",
+                    },
+                    "color": {
+                        "type": "string",
+                        "description": "The color of the label",
+                    },
+                },
+                "required": ["name", "color"],
+            },
+        },
+    },
+    "required": ["tags"],
+}
+```
+
+The function can only be called once the "required" parameters have been collected. If necessary information is missing, the function cannot be invoked. You 
+must define which parameters are mandatory in order for the function to be called.
+
+For additional information on the supported JSON schema, please reference this guide: https://json-schema.org/understanding-json-schema/reference/type
+
+## Testing the chatbot
+
+Once everything is set up, save your function, then save the Agent. You can then test it out under “Preview” tab:
+
+<Frame>
+  <img src="/images/fc-external-database-api-8.png" />
+</Frame>
+
+You can turn on the debug mode with the toggle on the top right corner of the screen. This will allow you to inspect the output of the function if it had been 
+called during the LLM response:
+
+<Frame>
+  <img src="/images/fc-external-database-api-9.png" />
+</Frame>
+
+Just like that, you equipped your AI Agent with on-demand information from an external data provider. In the future, we will also write a guide that helps you 
+implement and host your own database search function that then gets integrated with GPT Chatbot.

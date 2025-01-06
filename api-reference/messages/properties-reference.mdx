@@ -1,0 +1,32 @@
+---
+title: "Message Properties"
+description: "Detailed explanation of message's properties"
+---
+
+<ParamField body="uuid" type="string">
+  Unique Id of the message
+</ParamField>
+<ParamField body="created_at" type="string">
+  Indicates message creation time
+</ParamField>
+<ParamField body="modified_at" type="string">
+  Indicates message modified time
+</ParamField>
+<ParamField body="finish_reason" type="string">
+  The reason the model stopped generating the message. This will be <code>stop</code> if the model hit a natural stop point or a provided stop sequence, 
+  or <code>length</code> if the maximum number of tokens specified in the request was reached.
+</ParamField>
+<ParamField body="cite_data_json" type="string">
+    Our AI bot credits sources and includes links to specific information it used from 
+    your trained data, promoting a reliable and informed conversation. To make it work 
+    enable <code>show_citations</code> property for your <code>Chatbot</code>.
+</ParamField>
+<ParamField body="meta_json" type="string">
+    Message metadata 
+</ParamField>
+<ParamField body="query" type="string">
+  User's query
+</ParamField>
+<ParamField body="response" type="string">
+  AI response for user's query
+</ParamField>

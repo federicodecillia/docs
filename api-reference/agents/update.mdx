@@ -1,0 +1,191 @@
+---
+title: "Update Agent"
+api: "POST https://app.gptchatbot.it/api/v1/agent/{uuid}/update"
+description: "Update agent meta based on uuid"
+---
+
+### Path
+
+<ParamField path="uuid" type="string" required/>
+
+### Body
+
+<ParamField body="name" type="string"/>
+<ParamField body="prompt" type="string"/>
+<ParamField body="description" type="string"/>
+<ParamField body="model" type="string"/>
+<ParamField body="enabled" type="boolean"/>
+<ParamField body="data_source_uuids" type="List[string]"/>
+<ParamField body="human_escalation_settings" type="HumanEscalationSettings Object" >
+  <Expandable>
+    <ParamField body="human_requested_message" type="string" />
+    <ParamField body="live_chat_end_announcement" type="string" />
+    <ParamField body="live_chat_start_announcement" type="string" />
+    <ParamField body="monitored_messages" type="List[string]" />
+    <ParamField body="notifications_enabled" type="boolean" />
+    <ParamField body="sound_enabled" type="boolean" />
+  </Expandable>
+</ParamField>
+<ParamField body="variables" type="List[AgentVariable]" >
+  <Expandable>
+    <ParamField body="name" type="string" />
+    <ParamField body="description" type="string" />
+    <ParamField body="type" type="select">
+      "string", "number", "boolean"
+    </ParamField>
+    <ParamField body="example" type="string" />
+  </Expandable>
+  Only for <code>user-facing</code> agents.
+</ParamField>
+<ParamField body="tags" type="tags Object" >
+  <Expandable>
+    <ParamField body="name" type="string" />
+    <ParamField body="criteria" type="string" />
+    <ParamField body="color" type="string" />
+  </Expandable>
+  Only for <code>background</code> agents.
+</ParamField>
+<ParamField body="temperature" type="float" />
+<ParamField body="use_all_sources" type="boolean" />
+
+### Response
+
+<ResponseField name="uuid" type="string" />
+<ResponseField name="name" type="string" />
+<ResponseField name="prompt" type="string" />
+<ResponseField name="description" type="string" />
+<ResponseField name="type" type="string" />
+<ResponseField name="created_at" type="string" />
+<ResponseField name="modified_at" type="string" />
+<ResponseField name="enabled" type="boolean" />
+<ResponseField name="meta" type="meta Object" />
+<ResponseField name="data_source_uuids" type="List[string]" />
+<ResponseField name="human_escalation_settings" type="HumanEscalationSettings Object" />
+<ResponseField name="tool_functions" type="List[ToolFunction]" />
+<ResponseField name="variables" type="List[AgentVariable]" />
+
+<RequestExample>
+
+```bash Curl
+curl --location --request POST 'https://app.gptchatbot.it/api/v1/agent/{uuid}/update' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data-raw '{
+    "name": "Test update agent name",
+    "description": "Test update agent description",
+    "prompt": "Test update agent prompt",
+    "model": "gpt-4o-mini-16k",
+    "enabled": true,
+    "variables": [{"description":"Email of the user.","example":"alice@company.com, ben@school.edu, carl@city.org","type":"string","default_value":{"content":"","static":0},"name":"user_email"},{"description":"Full name of the user, in the format of [First name] [Last name]","example":"","type":"string","default_value":{"content":"","static":0},"name":"user_name"}]
+
+}'
+```
+
+```py Python
+import requests
+
+uuid = '<agent-uuid>'
+url = f'https://app.gptchatbot.it/api/v1/agent/{uuid}/update'
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+}
+
+data = {
+    "name": "Test update agent name",
+    "description": "Test update agent description",
+    "prompt": "Test update agent prompt",
+    "model": "gpt-4o-mini-16k",
+    "enabled": true,
+    "variables": [{"description":"Email of the user.","example":"alice@company.com, ben@school.edu, carl@city.org","type":"string","default_value":{"content":"","static":0},"name":"user_email"},{"description":"Full name of the user, in the format of [First name] [Last name]","example":"","type":"string","default_value":{"content":"","static":0},"name":"user_name"}]
+
+}
+
+response = requests.post(url, headers=headers, json=data)
+
+if response.status_code == 200:
+    print("Request successful!")
+    print(response.json())
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require('axios');
+
+const uuid = '<agent-uuid>'
+const url = `https://app.gptchatbot.it/api/v1/agent/${uuid}/update`;
+const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+};
+
+data = {
+    "name": "Test update agent name",
+    "description": "Test update agent description",
+    "prompt": "Test update agent prompt",
+    "model": "gpt-4o-mini-16k",
+    "enabled": true,
+    "variables": [{"description":"Email of the user.","example":"alice@company.com, ben@school.edu, carl@city.org","type":"string","default_value":{"content":"","static":0},"name":"user_email"},{"description":"Full name of the user, in the format of [First name] [Last name]","example":"","type":"string","default_value":{"content":"","static":0},"name":"user_name"}]
+
+}
+
+axios.post(url, data, { headers })
+    .then(response => {
+        console.log('Request successful!');
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error('Request failed:', error);
+    });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+    "created_at": "2024-07-25T21:19:01Z",
+    "data_source_uuids": [],
+    "description": "Test update agent description",
+    "enabled": true,
+    "meta": {
+        "model": "gpt-4o-mini-16k",
+        "tags": [],
+        "temperature": 0.0
+    },
+    "modified_at": "2024-07-25T21:19:01Z",
+    "name": "Test update agent name",
+    "prompt": "Test update agent prompt",
+    "tool_functions": [],
+    "type": "user-facing",
+    "uuid": "43474da7ae3b4b7191ee29c2de798257",
+    "variables": [
+        {
+            "default_value": {
+                "content": "",
+                "static": 0
+            },
+            "description": "Email of the user.",
+            "example": "alice@company.com, ben@school.edu, carl@city.org",
+            "name": "user_email",
+            "type": "string"
+        },
+        {
+            "default_value": {
+                "content": "",
+                "static": 0
+            },
+            "description": "Full name of the user, in the format of [First name] [Last name]",
+            "example": "",
+            "name": "user_name",
+            "type": "string"
+        }
+    ]
+}
+
+```
+
+</ResponseExample>

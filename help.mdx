@@ -1,0 +1,131 @@
+---
+title: Why does my chatbot not answer correctly?
+---
+
+When Google scientists first introduced the concept of the “transformer” (https://arxiv.org/pdf/1706.03762.pdf), the idea received attention within
+the Natural Language Processing (NLP) community. It paved a new direction for researchers to develop neural network models with applications towards
+natural language understanding.
+
+Not long after, OpenAI popularized Generative Pre-trained Transformers (GPT) and pioneered Large Language Models (LLMs) through ChatGPT. The conversational
+performance of these models made people believe that AI is rapidly approaching human-level intelligence, and can therefore be trained to perform a variety
+of human-capable tasks.
+
+However, despite how “human” these LLMs may seem, they are far from truly seeing, interpreting, and understanding the world the way humans do.
+These models should be regarded as “probabilistic conversation simulators” rather than true analytical engines. The governing concept behind these
+models is pattern matching and semantic correlations, not true logic and reasoning.
+
+GPT Chatbot is powered by OpenAI’s LLMs. It utilizes Retrieval Augmented Generation (RAG) technology to tune its responses to the data that you upload
+as reference context.
+
+## What is Retrieval Augmented Generation (RAG)?
+
+Large Language Models (LLMs) are trained on enormous amounts of text data. Based on this data, the LLM will identify patterns and try to
+replicate them during its own text generation. When producing an output, LLMs start from a user-written prompt, then algorithmically
+assigns probabilities to “tokens” or words that most likely succeed (follow after) the prompt based on patterns observed within its original
+training data. This is why OpenAI named a number of its API endpoints “Chat Completions” - the model tries to “complete” the user’s input query.
+
+<Note>
+  To better understand what “tokens” are in the context of LLMs, please refer to
+  the following article from OpenAI’s own documentation:
+  https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them
+</Note>
+
+But patterns do not necessarily imply truth, consistency, or logical compliance, just as correlation does not imply causation.
+This is the reason LLMs often “hallucinate” when producing a response. Retrieval Augmented Generation (RAG) tries to remedy
+this problem by “biasing” the aforementioned probabilities during text generation via additional context injected into the prompt.
+
+To further illustrate this, we walk you through the following example:
+
+When you ask a question to ChatGPT, a typical query might look something like:
+
+```
+What is GPT Chatbot?
+```
+
+This is a query that relies fully on the semantic patterns within the model’s own foundational training data to generate an answer. There is no guarantee that the answer will be accurate or trustworthy.
+
+But what if the prompt changes to:
+
+```
+Answer the question below using the following provided context:
+
+GPT Chatbot is a powerful no-code/low-code framework that allows you to build
+multi-agent chatbots with function-calling capabilities using your own data. It is designed to be user-friendly
+and versatile, providing customization options and integration with popular platforms.
+
+What is GPT Chatbot?
+```
+
+Now, the model has a lot more to work with. In fact, the semantic patterns identified in the prompt itself can closely guide the model when answering
+the user’s question. This “added context” biases the model to generate new tokens in a semantically similar fashion.
+
+RAG is the process of “enriching” the input query with additional context so that the model answers questions based on provided information.
+It does not modify or fine-tune the foundational LLM itself, but rather injects the user’s original prompt with data residing elsewhere.
+
+So now you might ask, why don’t I just throw my entire 15-million-words library of blog articles directly into the LLM as reference context
+every time I ask a question?
+
+Well, if the LLM is large enough to take in so many tokens (words) as input all at once, then sure, it’s perfectly viable to do so, provided you can afford the costs.
+
+However, we use OpenAI's large language models (LLMs), all of which have token limits. The token limit dictates how much "effective content"
+can be used as context. For GPT Chatbot's chat, we can fit about 10,000 words using the gpt-3.5-16k model.
+
+The chatbot sits on top of many documents that, altogether, usually contain far more than 10,000 words. This means that we cannot fit everything
+into the token limit all the time.
+
+We get around this problem by splitting long documents into chunks, calculating embeddings for each chunk, and storing them piecewise into a
+vector database. Embeddings can be thought of as mathematical representations of the meaning behind a snippet of text. It is like a
+“universal human language” of sorts, except spoken by machines and represented in mathematical vectors. Natural language statements
+that are semantically similar will be “physically” closer together in the embedding vector space. Here is a good article explaining
+“text embeddings” in greater detail: https://stackoverflow.blog/2023/11/09/an-intuitive-introduction-to-text-embeddings/
+
+Every time you enter an AI query, we algorithmically search the database for relevant chunks to use as reference based on embedding distance.
+This is all done independently from the LLM query itself. The LLM does not actively participate in this "chunk selection" step when deciding
+what information to include in the context.
+
+Afterwards, the top chunks get included as context and injected into the user’s original query. This is the basis of Retrieval Augmented
+Generation (RAG). Remember our example from earlier? When the user asks:
+
+```
+What is GPT Chatbot?
+```
+
+the most relevant chunk that will likely be pulled from our vector database is:
+
+```
+GPT Chatbot is a powerful no-code/low-code framework that allows you to build multi-agent chatbots with function-calling
+capabilities using your own data. It is designed to be user-friendly and versatile, providing customization options and
+integration with popular platforms.
+```
+
+and the chatbot will now “know” the answer.
+
+Here is a good visual from AWS illustrating at a high level the series of RAG steps:
+
+<Frame caption="https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-customize-rag.html">
+  <img src="/images/help-1.png" />
+</Frame>
+
+However, this approach also has limitations. The following types of queries generally work well:
+
+| Query Type                  | Definition                                                            | Example                                              |
+| --------------------------- | --------------------------------------------------------------------- | ---------------------------------------------------- |
+| Information Retrieval       | Asking for specific information residing within one or more documents | "What is Paladin Max, Inc.'s PTO policy?"            |
+| Topic-centric Summarization | Aggregating information centered around a theme or topic              | "Summarize the latest developments in generative AI" |
+
+The following types of queries may not work as well:
+
+| Query Type                      | Definition                                                                                      | Example                                                                                      |
+| ------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Document Comparison             | Comparing documents without an explicit criteria                                                | "Find any inconsistencies across the arguments presented across my documents and list them." |
+| Counting or Math                | Counting mentions or performing quantitative analysis based on document content                 | "How many times was John named across the contracts?"                                        |
+| Meta-Level Instructions         | Directing the AI to trace document structure or reference content on specific sections or pages | "Identify key points from section 3 of business_report.pdf, covering pages 33-37."           |
+| Library-wide Metadata Inquiries | Asking about properties or aggregate statistics of multiple documents inside the library        | "How many documents talk about xx topic and list them in a table."                           |
+| Longform Text Generation        | Writing extended text based on provided documents                                               | "Write a 5000 words literature review."                                                      |
+
+If your use case demands it, our multi-Agent architecture and function-calling support may help address some of these complexities,
+but they require advanced configuration on your part. Please refer to our other related articles for best practices when deploying
+multi-agent chatbots with function-calling capabilities.
+
+There may be alternative ways for you to optimize your chatbot&apos;s performance by improving the quality of your training data.
+To learn how, please check out [Best practices for preparing training data](/best-practices).

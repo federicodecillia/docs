@@ -1,0 +1,84 @@
+---
+title: "Delete multiple Sources"
+api: "POST https://app.gptchatbot.it/api/v1/data-sources/delete"
+description: "Delete list of sources base on their uuids"
+---
+
+### Body
+
+<ParamField body="uuids" type="string[]" required/>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if api call was successful
+</ResponseField>
+
+
+<RequestExample>
+
+```bash Curl
+curl --location --request POST 'https://app.gptchatbot.it/api/v1/data-sources/delete' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>'
+--data-raw '{
+  "uuids": []
+}'
+```
+
+```py Python
+import requests
+
+url = 'https://app.gptchatbot.it/api/v1/data-sources/delete'
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+}
+
+data = {
+    "uuids": [],
+}
+
+response = requests.POST(url, headers=headers, json=data)
+
+if response.status_code == 200:
+    print("Request successful! Sources deleted.")
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require('axios');
+
+const url = 'https://app.gptchatbot.it/api/v1/data-sources/delete';
+const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+};;
+
+const data = {
+    "uuids": []
+};
+
+axios.post(url, data, { headers })
+    .then(response => {
+        console.log('Request successful! Sources deleted.');
+    })
+    .catch(error => {
+        console.error('Request failed:', error);
+    });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true
+}
+
+```
+
+</ResponseExample>

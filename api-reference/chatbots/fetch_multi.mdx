@@ -1,0 +1,100 @@
+---
+title: "Fetch all Chatbots"
+api: "GET https://app.gptchatbot.it/api/v1/chatbots"
+description: "Fetch the list of chatbots for current user"
+---
+
+### Response
+
+<ResponseField name="" type="object[]">
+Chatbot list
+<Expandable title="Chatbot properties">
+<ResponseField name="created_at" type="string"/>
+
+<ResponseField name="meta" type="object">
+The meta of chatbot
+<Expandable title="Toggle object">
+<ResponseField name="rate_limit" type="[number, number]"/>
+<ResponseField name="rate_limit_message" type="string"/>
+<ResponseField name="show_citation" type="boolean"/>
+<ResponseField name="visibility" type="string"/>
+</Expandable>
+</ResponseField>
+
+<ResponseField name="modified_at" type="string"/>
+
+<ResponseField name="name" type="string"/>
+<ResponseField name="uuid" type="string"/>
+
+</Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash Curl
+curl --location --request GET 'https://app.gptchatbot.it/api/v1/chatbots' \
+--header 'Authorization: Bearer <token>'
+```
+
+```py Python
+import requests
+
+url = 'https://app.gptchatbot.it/api/v1/chatbots'
+headers = {
+    'Authorization': 'Bearer <token>'
+}
+
+response = requests.get(url, headers=headers)
+
+if response.status_code == 200:
+    print("Request successful!")
+    print(response.json())
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require('axios');
+
+const url = 'https://app.gptchatbot.it/api/v1/chatbots';
+const headers = {
+    'Authorization': 'Bearer <token>'
+};
+
+axios.get(url, { headers })
+    .then(response => {
+        console.log('Request successful!');
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error('Request failed:', error);
+    });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+[
+    {
+        "created_at": "string",
+        "meta": {
+            "rate_limit": [
+            20,
+            240
+            ],
+            "rate_limit_message": "Too many messages",
+            "show_citations": false,
+            "visibility": "private"
+        },
+        "modified_at": "string",
+        "name": "string",
+        "uuid": "string"
+    }
+]
+
+```
+
+</ResponseExample>

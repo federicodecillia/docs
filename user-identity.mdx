@@ -1,0 +1,128 @@
+---
+title: User Identity Verification
+---
+
+This guide will walk you through implementing a robust authentication system within your chatbot.
+
+## Step 1: Enable User Identity
+
+To initiate the User Identity Verification process, you need to first enable this feature within your chatbot settings.
+This can be done through the chatbot settings in "User Identity Verification" section.
+
+Once the User Identity Verification is enabled your chatbot becomes equipped to automatically check for user tokens.
+This means each time a user attempts to interact with the chatbot, their identity token will be reviewed for authenticity.
+
+<Frame>
+  <img src="/images/user-identity-1.png" />
+</Frame>
+
+## Step 2: API Endpoint
+
+### Setting Up the API Endpoint
+
+It is essential to set up an API endpoint that will handle the verification of user tokens. This endpoint must be configured to accept POST requests.
+
+1. **Specify the API Endpoint:** In your chatbot settings, provide the URL of the API endpoint. This is the server address where the token verification requests will be sent.
+
+2. **Configure for POST Requests:** Ensure that your API endpoint is configured to handle POST requests. This is crucial as the GPT Chatbot will send token data via POST requests for verification.
+
+<Frame>
+  <img src="/images/user-identity-2.png" />
+</Frame>
+
+### Verification Process Flow
+
+Here's what happens each time a chat is initiated:
+
+1. **Token Submission:** Whenever a chat is rendered, GPT Chatbot automatically sends a verification request to the provided API endpoint. This request includes the user's token.
+
+2. **Processing the Request:** Your API endpoint should process this request, verifying the token's validity.
+
+3. **Outcome Handling:**
+
+   - **Successful Verification:** If the token is verified successfully, the chatbot will allow the authenticated user to proceed with the chat.
+   - **Failed Verification:** In case the API returns an error (indicating a failed verification), the authentication will be deemed unsuccessful. Consequently, the user will be redirected to an error screen.
+
+## Step 3: Save User's Data
+
+To enhance the functionality of the User Identity Verification process and maintain records of user interactions,
+you have the option to save the data from successful verification responses.
+
+<Frame>
+  <img src="/images/user-identity-3.png" />
+</Frame>
+
+Every time a user is successfully authenticated, the response from the verification process (typically including user identification details) is stored.
+
+This data is not stored in isolation but is linked with the specific chat conversations.
+
+<Warning>
+  **Only Valid JSON Data Accepted** - Please ensure that all data provided for
+  storage is in valid JSON format. Non-JSON or invalid JSON data will be
+  automatically ignored and not stored in the conversation history.
+</Warning>
+
+Example of valid JSON:
+
+```json
+{
+  "userId": "12345",
+  "userName": "JohnDoe",
+  "email": "johndoe@example.com",
+  "verified": true,
+  "roles": ["user", "admin"],
+  "profile": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "age": 30
+  }
+}
+```
+
+## Step 4: Inserting Your Token into GPT Chatbot Chatbot
+
+### Chat Widget
+
+Within the script of your webpage where the chatbot is integrated, locate the **GPTTConfig** object.
+Here, you will need to update the **token** property with custom token. Here's an example script:
+
+```html
+<script>
+  window.GPTTConfig = {
+      uuid: "15b1f07cd591476c94c210779a6c3c19",
+      token: <"Custom token">
+  }
+</script>
+<script src="https://app.gptchatbot.it/widget-asset.min.js" defer></script>
+```
+
+You can also directly update the **GPTTConfig** object with your token using a **JavaScript** call.
+This method is particularly useful if you need to dynamically update the token based on user interactions or other triggers within your application. Here's how you can do it:
+
+```JavaScript
+  window.GPTTConfig.token = "Custom token";
+```
+
+When a change in the token property is detected, our system initiates an attempt to authenticate the user based on the new token value.
+This ensures that the user's identity is verified each time they interact with the chatbot.
+
+### Iframe
+
+You can pass the user token directly within an iframe by including it in the URL property.
+Append the **token** parameter to the **URL** in the src attribute, replacing **custom_token** with the actual token value. Here's an example:
+
+```html
+<iframe
+  src="https://app.gptchatbot.it/widget/162223v?token=<custom_token>"
+  width="100%"
+  height="500px"
+  frameborder="0"
+></iframe>
+```
+
+If there is a need to change the token, simply update the src attribute of the iframe with the new token value.
+
+Upon updating the token in the URL, the iframe will reload, ensuring that the new token is used for authentication.
+
+Congratulations! You have now successfully completed the setup of the User Identity Verification feature for your GPT Chatbot Chatbot.
+By following the steps outlined in this guide, you have enabled a robust and secure method for authenticating users, ensuring a safe and reliable user experience.

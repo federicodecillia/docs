@@ -1,0 +1,140 @@
+---
+title: Multi-Agents Chatbot
+---
+
+GPT Chatbot is the first and most powerful no-code AI Chat framework that
+implements a multi-agent architecture. Multiple AI Agents work together in a coordinated orchestration
+to enable advanced workflow automations.
+
+We present this guide to help you understand how our Agents work together, as well as share
+with you some best practices surrounding multi-agent chatbot design.
+
+All Agents have two states:
+
+    - **Active:** Agent is “Connected”. It is live and running.
+    - **Inactive:** Agent is “Disabled”. It does not do anything.
+
+Only a single Agent engages with the user at any given time. Our AI Supervisor works in the background, in real time,
+to decide which Agent processes the user's inquiry when it comes in.
+
+<Note>
+  Agents are completely isolated from one another. This means that you cannot
+  tell Agent B what to do from inside Agent A, and you cannot tell the AI
+  Supervisor to "pass the baton" from Agent A to Agent B directly. The AI
+  Supervisor cannot be instructed on what to do using natural language.
+</Note>
+
+The AI Supervisor assigns user queries to AI Agents based on the Agent description. This means that if
+you have only a single AI Agent, then you don't need a very good description. But if you are working with
+multiple AI Agents, then you should have as explict a description as possible.
+
+- Agent Description - What kind of tasks should the Agent do?
+- Agent Prompt - How should the Agent perform its tasks?
+
+<Frame>
+  <img src="/images/multi-agents-chatbot-5.png" />
+</Frame>
+
+<Note>
+  AI Agent description is different from the Prompt. Description should tell the
+  AI Supervisor what the Agent is designed to do at a high level, focusing on
+  the type of user queries it should handle. Prompt is a set of instructions
+  telling the AI Agent how to behave.
+</Note>
+
+Good Agent descriptions should answer the question **“What type of queries should the Agent handle?”**
+More specifically, Agent descriptions should encompass all relevant “user intents” that it is supposed to handle.
+
+Agent descriptions **should not** include details about “how the Agent performs its job”.
+That part should be reserved for the Agent’s Prompt.
+
+Here are some examples of good Agent descriptions:
+
+<AccordionGroup>
+  <Accordion title="GPT Chatbot Support">
+    Embody the role of "GPT Chatbot Expert," a specialized guide for GPT Chatbot. Your main objective is to assist users with answering GPT Chatbot-related questions related to:
+    - Use cases
+    - Features and capabilities
+    - Data security
+    - Pricing
+    - AI Agents and multi-Agent architecture
+    - User identity verification
+    - Chunk curation
+    - Function calling
+    - Partnership program
+    - Custom domains
+    - Tokens
+
+    All intents handled by this Agent should be related to GPT Chatbot.
+
+  </Accordion>
+
+{" "}
+<Accordion title="Product Expert">
+  The Product Expert handles any user queries related to Example Company's
+  products. This includes questions regarding: - Product availability - Product
+  specifications - Price - Shipping location - Warranty - Return policy -
+  Disclaimers, legal notices, and warning labels
+</Accordion>
+
+    <Accordion title="Order Status Assistant">
+    The Order Status Assistant handles any user queries related to an order's status. This includes questions regarding:
+    - Product package tracking
+    - Current package location
+    - Estimated time of delivery
+    - Late delivery compensation
+
+  </Accordion>
+
+</AccordionGroup>
+
+So what makes for a good multi-agent chatbot design? How can I ensure that all my user intents are handled by the appropriate Agent?
+
+In general, a multi-agent architecture is great for having specialized AI Agents work together as a team. Each AI Agent
+can be trained on a different set of source data, be powered by a different LLM, have a different Prompt, or even be given
+different tools (functions). It is much more effective than dumping everything into a single Agent.
+
+On the surface, your users will not know that they are engaging with multiple AI Agents when talking to the chatbot,
+since all of the complex orchestration takes place seamlessly behind the scenes. With the right setup, they will feel
+as though they are talking to a human instead of a machine. A multi-agent chatbot has the potential to be much more
+powerful than single-agent ones like ChatGPT.
+
+In our AI Supervisor routing design, we use an algorithm that balances latency with performance.
+It will not always give you 100% accuracy, but you can get pretty close if you design your chatbots effectively.
+
+## Debugging the chatbot
+
+If you notice that the chatbot is not responding to your expectations, then there may be two causes.
+
+1. The wrong Agent may have been assigned to handle the incoming user query.
+2. The Agent itself may not be optimally configured.
+
+To find out whether your intended Agent has been selected to handle the user’s query, go to “Inbox” and turn on debug mode.
+Toggle it on here:
+
+<Frame>
+  <img src="/images/multi-agents-chatbot-6.png" />
+</Frame>
+
+Under “Active Agent”, you will see the Agent that generated the response. Please note that you will only see “Active Agent” metadata
+if you have more than one connected AI Agents.
+
+If the Agent that handled the user query was not the correct one, you can return to Agent configuration and update its name, description,
+or prompt.
+
+If the correct Agent handled the user query but the response was not what you expected, then the issue resides within the Agent itself.
+You will then need to update the Agent configuration. The most straightforward way to fix a response is by revising the AI’s answer directly:
+
+<Frame>
+  <img src="/images/multi-agents-chatbot-4.png" />
+</Frame>
+
+This ensures that the chatbot will generate an answer based on what you revised every time it encounters the question in the future, assuming
+the same Agent was chosen to respond to the query.
+
+If you’d like to make the Agent more robust and consistent in general, you can curate the training data, choose a more powerful LLM, or be more
+explicit in your base prompt.
+
+To learn some best practices for training the chatbot, see [best practices for preparing training data](/best-practices)
+
+To learn more about fine-tuning Agent intents, please check out the article [Fine-Tuning Agent Intents](fine-tuning-agent-intents).

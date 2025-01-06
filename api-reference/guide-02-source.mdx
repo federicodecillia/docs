@@ -1,0 +1,105 @@
+---
+title: Uploading Data Sources
+---
+
+In this guide, we will walk through the process of uploading data sources to your chatbot using the GPT Chatbot API.
+
+## Prerequisites
+
+Before you begin, make sure you have the following:
+
+- An API key for accessing the GPT Chatbot API.
+- A development environment or tool for making HTTP requests, such as Curl or a programming language like Python.
+
+## API Endpoint
+
+The API endpoint for uploading data sources to your chatbot is: `https://app.gptchatbot.it/api/v1/chatbot/{uuid}/data-source/url`.
+
+<Warning>Make sure to replace `{uuid}` with the UUID of your chatbot..</Warning>
+
+## Request Body
+
+To upload a data source, you need to send a POST request to the API endpoint with a JSON request body containing the URL of the data source. Here's an example request body:
+
+```json
+{
+  "url": "https://example.com/data-source"
+}
+```
+
+- url (string, required): Provide the URL of the data source you want to upload.
+
+## Example Request
+
+Here're example command sto create a chatbot using the GPT Chatbot API:
+
+<Warning>Replace **token** with your actual API key.</Warning>
+
+<CodeGroup>
+
+```bash Curl
+curl --location --request POST 'https://app.gptchatbot.it/api/v1/chatbot/{uuid}/data-source/url' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data-raw '{
+  "url": "string"
+}'
+```
+
+```py Python
+import requests
+
+url = 'https://app.gptchatbot.it/api/v1/chatbot/{uuid}/data-source/url'
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+}
+
+params = {
+    'uuid': '<chatbot-uuid>'
+}
+
+data = {
+    "url": "string",
+}
+
+response = requests.post(url, headers=headers, params=params, json=data)
+
+if response.status_code == 200:
+    print("Request successful!")
+    print(response.json())
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require('axios');
+
+const url = 'https://app.gptchatbot.it/api/v1/chatbot/{uuid}/data-source/url';
+const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+};
+
+const params = {
+    uuid: '<chatbot-uuid>'
+};
+
+const data = {
+    "url": "string",
+};
+
+axios.post(url, data, { headers, params })
+    .then(response => {
+        console.log('Request successful!');
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error('Request failed:', error);
+    });
+```
+
+</CodeGroup>
+
+That's it! You've now learned how to upload data sources to your chatbot using the GPT Chatbot API.

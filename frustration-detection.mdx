@@ -1,0 +1,72 @@
+---
+title: Frustration Detection
+---
+
+To create a simple Frustration Detection Agent, head to the “AI Agents” tab. You can find the template for
+a Frustration Detection Agent when you click on "Create new Agent".
+
+<Frame>
+  <img src="/images/frustration-detection-1.png" />
+</Frame>
+
+After you create the new Agent, go into its edit screen by clicking on it. Frustration Detection Agent is a background Agent.
+It is always run in parallel to the user-facing Agent currently handling the user’s input query.
+To learn more about background Agents, please see [Background Agents](/background-agents).
+
+<Frame>
+  <img src="/images/frustration-detection-2.png" />
+</Frame>
+
+Scroll down to review the base prompt. You can modify it based on what type of behavior
+you would like the Agent to monitor for. You can also set the LLM that the background Agent
+should use when analyzing the user's behavior. For a good balance between cost and performance, we recommend GPT-4-1106-1k
+
+Click “Save changes” after you are done.
+
+Next, go to the “Variables / Tags” tab. Notice that the template already defines a number of tags for you.
+You can configure the settings for each tag by clicking on the pencil icon to the right of each card.
+
+<Frame>
+  <img src="/images/frustration-detection-3.png" />
+</Frame>
+
+When you are adding / editing tags, you will be asked to specify the tag Name, Color, as well as
+Criteria for assignment. Be concise and explicit in your definition. Keep in mind that these criteria
+are evaluated against the user’s most recent conversation history.
+
+<Frame>
+  <img src="/images/frustration-detection-4.png" />
+</Frame>
+
+Please note that tags are fixed once they have been assigned to conversations. Updating tags will only
+apply changes to NEW conversations, not older ones. Older conversations will still have the previous version
+of your tags before you made those updates.
+
+Click “Save changes” and close the Agent edit dialog. Return to the Agent selection view.
+You can now “Connect” your new Frustration Detection Agent. On the top right of the Agent card,
+open the “three dot” dropdown menu, then select “Connect”.
+
+<Frame>
+  <img src="/images/frustration-detection-5.png" />
+</Frame>
+
+Go to the “Preview” tab. You can now test your new chatbot, now equipped with Frustration Detection capabilities!
+
+To review the data you collected, open the “Debug mode” while you are still in Preview.
+
+<Frame>
+  <img src="/images/frustration-detection-6.png" />
+</Frame>
+
+You can also head to the “Inbox” tab, find the test conversation session, then open “Debug view”.
+
+<Frame>
+  <img src="/images/frustration-detection-7.png" />
+</Frame>
+
+You can export the data you collected within a conversation by going to the “Inbox” tab, selecting the conversation session of
+interest, then clicking the “Export” button. In the subsequent dropdown, select “Chat History”.
+
+<Frame>
+  <img src="/images/frustration-detection-8.png" />
+</Frame>

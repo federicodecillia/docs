@@ -1,0 +1,103 @@
+---
+title: "Update Source Tag"
+api: "POST https://app.gptchatbot.it/api/v1/source-tag/<uuid>/update"
+description: "Update the properties of a source tag, including its list of documents."
+---
+
+### Path
+
+<ParamField path="uuid" type="string" required />
+
+### Body
+
+<ParamField body="name" type="string" />
+<ParamField body="color" type="string">
+  The color of the tag in code format, e.g. #088F8F
+</ParamField>
+<ParamField body="data_source_uuids" type="List[string]">
+  The list of data sources to initially be included in the source tag.
+</ParamField>
+
+### Response
+
+<ResponseField name="uuid" type="string" />
+<ResponseField name="name" type="string" />
+<ResponseField name="color" type="string" />
+<ResponseField name="data_source_uuids" type="List[string]" />
+<ResponseField name="created_at" type="string" />
+<ResponseField name="modified_at" type="string" />
+
+<RequestExample>
+
+```bash Curl
+curl --location --request POST 'https://app.gptchatbot.it/api/v1/source-tag/<uuid>/update' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data-raw '{
+  "name": "updated name",
+}'
+```
+
+```py Python
+import requests
+
+url = 'https://app.gptchatbot.it/api/v1/source-tag/<uuid>/update'
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+}
+
+data = {
+  "name": "updated name",
+}
+
+response = requests.post(url, headers=headers, json=data)
+
+if response.status_code == 200:
+    print("Request successful!")
+    print(response.json())
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require("axios");
+
+const url = "https://app.gptchatbot.it/api/v1/source-tag/<uuid>/update";
+const headers = {
+  "Content-Type": "application/json",
+  Authorization: "Bearer <token>",
+};
+
+const data = {
+  name: "updated name",
+};
+
+axios
+  .post(url, data, { headers })
+  .then((response) => {
+    console.log("Request successful!");
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "color": "#088F8F",
+  "created_at": "2024-09-12T00:19:12Z",
+  "data_source_uuids": [],
+  "modified_at": "2024-09-13T01:25:07Z",
+  "name": "updated name",
+  "uuid": "d6099f4845794b4bb088b291fc3ef23a"
+}
+```
+
+</ResponseExample>

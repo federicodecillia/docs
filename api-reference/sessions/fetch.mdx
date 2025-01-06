@@ -1,0 +1,87 @@
+---
+title: "Fetch a Session"
+api: "GET https://app.gptchatbot.it/api/v1/session/{uuid}"
+description: "Fetch single chatbot session base on uuid"
+---
+
+### Path
+
+<ParamField path="uuid" type="string" required/>
+
+### Response
+
+<ResponseField name="created_at" type="string"/>
+<ResponseField name="modified_at" type="string"/>
+<ResponseField name="uuid" type="string"/>
+<ResponseField name="meta" type="meta Object">
+  Session meta properties
+  <Expandable title="properties">
+    <ResponseField name="user" type="user Object">
+      Exists when lead form was submitted by user
+    </ResponseField>
+    <ResponseField name="auth_data" type="auth_data Object">
+      Exists when user completes "User Identity Verification" and "Save Data on Success" feature is enabled
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash Curl
+curl --location --request GET 'https://app.gptchatbot.it/api/v1/session/{uuid}' \
+--header 'Authorization: Bearer <token>' \
+```
+
+```py Python
+import requests
+
+uuid = '<session-uuid>'
+url = f'https://app.gptchatbot.it/api/v1/session/{uuid}'
+headers = {
+    'Authorization': 'Bearer <token>'
+}
+
+response = requests.get(url,  headers=headers)
+
+if response.status_code == 200:
+    print("Request successful!")
+    print(response.json())
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require('axios');
+
+const uuid = '<session-uuid>'
+const url = `https://app.gptchatbot.it/api/v1/session/${uuid}`;
+const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+};
+
+axios.post(url, { headers })
+    .then(response => {
+        console.log('Request successful!');
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error('Request failed:', error);
+    });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "created_at": "string",
+  "modified_at": "string",
+  "uuid": "string"
+}
+
+```
+
+</ResponseExample>

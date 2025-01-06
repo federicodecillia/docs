@@ -1,0 +1,124 @@
+---
+title: AI Supervisor Overrides
+---
+
+If you have a multi-Agent chatbot setup, GPT Chatbot uses an AI Supervisor to automatically
+determine which user-facing Agent is best suited for handling the most recent input query. 
+However, there may be times when you want more “deterministic” control over which Agent handles 
+the job.
+
+In this article, we demonstrate how you can use AI Supervisor Overrides to set up logic conditions 
+that, when satisfied, directly switches to a designated Agent.
+
+In the AI Agents tab, you will see a button that expands “AI Supervisor Settings” drawer:
+
+<Frame>
+  <img src="/images/supervisor-overrides-1.png" />
+</Frame>
+
+After you open it, in the “Rules” tab, you will be able to specify conditional rules that get 
+evaluated every time the user inputs a query into your chatbot. These conditions, if satisfied, 
+will bypass the AI Supervisor’s own judgment and force a designated Agent to handle the current 
+input query.
+
+To add a new rule, click the “Create new rule” button. To edit rules, go to the three-dot-menu 
+on the top right of the rule, then select “Edit” in the dropdown.
+
+<Note>
+  Please note that you may need to scroll down on the dropdown menu to see additional options when 
+  you are building the rule.
+</Note>
+
+After you are satisfied with the rules, make sure to “Connect” them so they become active. Rules 
+are placed in an evaluation queue. This means that as soon as a rule evaluates to **TRUE**, all 
+subsequent rule evaluations will be skipped and that rule will be immediately executed.
+
+<Frame>
+  <img src="/images/supervisor-overrides-2.png" />
+</Frame>
+
+A good example of AI Supervisor Override in action is the “delayed lead collection” setup. Consider 
+the use case where you want to build a chatbot that handles general FAQ, but you want to start collecting 
+user information after 2-3 questions. Furthermore, you want to make it so that if the user insists on 
+not providing their information, your chatbot will continue serving them as an anonymous entity rather 
+than completely deny further meaningful interactions.
+
+First, you need a regular “Lead Collection” setup described in our [Lead Collection](/lead-collection) article. Once you 
+are finished, continue below.
+
+At this point, you should have two user-facing Agents set up:
+
+<Frame>
+  <img src="/images/supervisor-overrides-3.png" />
+</Frame>
+
+Then, open AI Supervisor Settings. Click “Create new rule”. In the three-dot-menu on the top right corner, 
+select “Edit”. You will enter edit mode for the rule. For our use case, we set the following conditions:
+
+<Frame>
+  <img src="/images/supervisor-overrides-5.png" />
+</Frame>
+
+This means that as soon as the “total # of user input queries” equals exactly 3, the AI Supervisor will set 
+the Agent to be Lead Collection. Click “Save”.
+
+Next, add another rule. This time, we apply the following conditions:
+
+  1. If the current Agent is Lead Collection,
+  2. AND, if the number of queries consecutively handled by the current active Agent is fewer than 4...
+  3. AND, if any of the user’s information (name, email, phone) is not specified...
+  4. THEN stay on the Lead Collection Agent.
+
+This means that the Lead Collection Agent will continue to request user information until either it has conversed 
+with the user at least 4 times or it has successfully collected all the requested information.
+
+While you are in edit mode, click “Add Rule” to add a new condition for evaluation. At step 2 above, your rule 
+setup should look like this:
+
+<Frame>
+  <img src="/images/supervisor-overrides-6.png" />
+</Frame>
+
+Step 3 requires a “group” evaluation where the conditions are defined as:
+
+  -	If Variable “user_name” is not specified...
+  -	OR, if Variable “user_ email” is not specified...
+  -	OR, if Variable “user_phone” is not specified...
+  -	Then evaluate to TRUE
+
+So we set up the following “Group”:
+
+<Frame>
+  <img src="/images/supervisor-overrides-7.png" />
+</Frame>
+
+Then within the group, click “Add Rule” and set up the appropriate conditional statements:
+
+<Frame>
+  <img src="/images/supervisor-overrides-8.png" />
+</Frame>
+
+Finally, as in step 4, make sure that the “Lead Collection” Agent is assigned when the rule is executed:
+
+<Frame>
+  <img src="/images/supervisor-overrides-9.png" />
+</Frame>
+
+Connect your rules via the same three-dot-menu option “Connect”. If successful, they should display a green 
+“Active” status:
+
+<Frame>
+  <img src="/images/supervisor-overrides-10.png" />
+</Frame>
+
+Now, we can go to “Preview” and test the chatbot under this new set of AI Supervisor Overrides. You should notice 
+the correct behavior being applied. In debug view, you should see an “override” tag next to Active Agent if an override 
+rule is enforced. 
+
+<Frame>
+  <img src="/images/supervisor-overrides-11.png" />
+</Frame>
+
+You can design many complex workflows using AI Supervisor Overrides. However, this is an advanced feature that directly 
+controls how the AI Supervisor behaves. We highly recommend that you test your configuration thoroughly before deploying 
+it if you wish to make use of this feature.

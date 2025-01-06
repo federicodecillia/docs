@@ -1,0 +1,193 @@
+---
+title: Chat with Chatbot
+---
+
+In this section, we will guide you on how to start chatting with your chatbot using the GPT Chatbot API.
+Before you begin, please ensure you meet the following prerequisites:
+
+## Prerequisites
+
+- An API key for accessing the GPT Chatbot API.
+- A development environment or tool for making HTTP requests, such as Curl or a programming language like Python.
+
+<Note>
+  Please note that to chat on specific topics, your chatbot needs to have
+  relevant data sources uploaded.
+</Note>
+
+## Start with creating a chat session
+
+### Why Create a Chat Session?
+
+Before sending messages to the chatbot, it's essential to create a chat session. A chat session acts as a container that holds all the messages exchanged between you and the chatbot. Here's why creating a chat session is necessary:
+
+1. **Message Context:** A chat session allows you to maintain context throughout a conversation. It ensures that the chatbot understands the context of your questions or statements.
+
+2. **Order of Messages:** The chat session helps in maintaining the order of messages. This is crucial for having meaningful and coherent conversations with the chatbot.
+
+3. **State Management:** The chat session allows you to manage the state of the conversation. You can continue a conversation seamlessly by referencing the same session UUID.
+
+### Create a chat session
+
+To create a chat session, you need to use a POST request to the API endpoint: `https://app.gptchatbot.it/api/v1/chatbot/{chatbot_uuid}/session/create`.
+
+<Warning>
+  Make sure to replace `{chatbot_uuid}` with the UUID of your chatbot.
+</Warning>
+
+### Example Request
+
+Here're example command to create a chatbot using the GPT Chatbot API:
+
+<Warning>Replace **token** with your actual API key.</Warning>
+
+<CodeGroup>
+
+```bash Curl
+curl --location --request POST 'https://app.gptchatbot.it/api/v1/chatbot/{chatbot_uuid}/session/create' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+```
+
+```py Python
+import requests
+
+url = 'https://app.gptchatbot.it/api/v1/chatbot/{chatbot_uuid}/session/create'
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer <token>'
+}
+
+
+response = requests.post(url,  headers=headers, params=params)
+
+if response.status_code == 200:
+    print("Request successful!")
+    print(response.json())
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require("axios");
+
+const url =
+  "https://app.gptchatbot.it/api/v1/chatbot/{chatbot_uuid}/session/create";
+const headers = {
+  "Content-Type": "application/json",
+  Authorization: "Bearer <token>",
+};
+
+axios
+  .post(url, { headers, params })
+  .then((response) => {
+    console.log("Request successful!");
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
+```
+
+</CodeGroup>
+
+This API request returns JSON data that you can reuse to send messages:
+
+```json
+{
+  "created_at": "string",
+  "modified_at": "string",
+  "uuid": "string"
+}
+```
+
+<Note>
+  The uuid from this response is essential for sending messages within the
+  established chat session. It will be used in the following steps.
+</Note>
+
+## Chat Within a Session
+
+### Send Messages
+
+With a chat session created, you can now send messages to your chatbot.
+Use the following API endpoint to send messages and get a streamed AI response:\
+`https://app.gptchatbot.it/api/v1/session/{session_uuid}/message/stream`
+
+<Warning>
+  Make sure to replace `{session_uuid}` with the `uuid` obtained from the chat
+  session creation response
+</Warning>
+
+### Example Request
+
+Here're example command to create a message using the GPT Chatbot API:
+
+<Warning>Replace **token** with your actual API key.</Warning>
+
+<CodeGroup>
+    ```bash Curl
+curl --location --request POST 'https://app.gptchatbot.it/api/v1/session/{session_uuid}/message/stream' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+--data-raw '{"query": "Your query goes here"}'
+```
+
+```py Python
+import requests
+
+url = f"https://app.gptchatbot.it/api/v1/session/{session_uuid}/message/stream"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "query": "Your query goes here"
+}
+
+response = requests.post(url, headers=headers, json=data, stream=True)
+
+if response.status_code == 200:
+    for line in response.iter_lines(decode_unicode=True):
+        # Process streaming response here
+        print(line + '\n')
+else:
+    print("Error:", response.status_code)
+```
+
+```ts JavaScript
+const xhr = new XMLHttpRequest();
+xhr.open(
+  "POST",
+  `https://app.gptchatbot.it/api/v1/session/{session_uuid}/message/stream`,
+  true
+);
+
+xhr.setRequestHeader("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+const data = JSON.stringify({ query: "Your query goes here" });
+
+xhr.send(data);
+
+xhr.onprogress = () => {
+  const streamingResponse = xhr.responseText;
+  console.log(streamingResponse);
+};
+
+xhr.onreadystatechange = () => {
+  if (xhr.readyState === 4) {
+    if (xhr.status === 200) {
+      console.log("Streaming completed successfully");
+    } else {
+      console.error("Error:", xhr.status);
+    }
+  }
+};
+```
+
+</CodeGroup>
+
+That's it! You've now learned how to chat with your own chatbot using the GPT Chatbot API.

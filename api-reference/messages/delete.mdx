@@ -1,0 +1,72 @@
+---
+title: "Delete Message"
+api: "POST https://app.gptchatbot.it/api/v1/message/{uuid}/delete"
+description: "Delete single message base on uuid"
+---
+
+### Path
+
+<ParamField path="uuid" type="string" required/>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if api call was successful
+</ResponseField>
+
+
+<RequestExample>
+
+```bash Curl
+curl --location --request POST 'https://app.gptchatbot.it/api/v1/message/{uuid}/delete' \
+--header 'Authorization: Bearer <token>'
+```
+
+```py Python
+import requests
+
+uuid = '<message-uuid>'
+url = f'https://app.gptchatbot.it/api/v1/message/{uuid}/delete'
+headers = {
+    'Authorization': 'Bearer <token>'
+}
+
+response = requests.POST(url, headers=headers)
+
+if response.status_code == 200:
+    print("Request successful! Message deleted.")
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require('axios');
+
+const uuid = '<message-uuid>'
+const url = `https://app.gptchatbot.it/api/v1/message/${uuid}/delete`;
+const headers = {
+    'Authorization': 'Bearer <token>'
+};
+
+axios.post(url, { headers })
+    .then(response => {
+        console.log('Request successful! Message deleted.');
+    })
+    .catch(error => {
+        console.error('Request failed:', error);
+    });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true
+}
+
+```
+
+</ResponseExample>

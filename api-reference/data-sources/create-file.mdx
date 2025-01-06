@@ -1,0 +1,115 @@
+---
+title: "Upload a File"
+api: "POST https://app.gptchatbot.it/api/v1/chatbot/{uuid}/data-source/upload"
+description: "Create a File source for a chatbot specified by chatbot uuid"
+---
+
+### Path
+
+<ParamField path="uuid" type="string" required />
+
+### Body
+
+<ParamField body="file_path" type="string" required />
+<ParamField body="reference_source_link" type="string" />
+
+### Response
+
+<ResponseField name="created_at" type="string" />
+<ResponseField name="file_name" type="string" />
+<ResponseField name="file_size" type="number" />
+<ResponseField name="meta_json" type="string" />
+<ResponseField name="modified_at" type="string" />
+<ResponseField name="status" type="string" />
+<ResponseField name="title" type="string" />
+<ResponseField name="type" type="string" />
+<ResponseField name="tokens" type="number" />
+<ResponseField name="uuid" type="string" />
+
+<RequestExample>
+
+```bash Curl
+curl -X POST -F "file=@{file_path}" 'meta_json="{\"reference_source_link\": \"{reference_source_link}\"}
+"' https://app.gptchatbot.it/api/v1/chatbot/{uuid}/data-source/upload \
+--header 'Authorization: Bearer <token>' \
+```
+
+```py Python
+import requests
+import os
+
+file_path = '{file_path}'
+
+api_url = 'https://app.gptchatbot.it/api/v1/chatbot/{uuid}/data-source/upload'
+
+headers = {
+    "Authorization": "Bearer <token>"
+}
+
+file_name = os.path.basename(file_path)
+
+files = {'file': (file_name, open(file_path, 'rb'))}
+
+payload={'reference_source_link': '{reference_source_link}'}
+
+response = requests.post(api_url, files=files, data=payload, headers=headers)
+
+if response.status_code == 200:
+    print('File upload successful:', response.text)
+else:
+    print('File upload failed:', response.status_code, response.text)
+
+```
+
+```ts JavaScript
+const fs = require("fs");
+const FormData = require("form-data");
+const axios = require("axios");
+
+const filePath = "{file_path}";
+const apiUrl =
+  "https://app.gptchatbot.it/api/v1/chatbot/{uuid}/data-source/upload";
+
+const fileName = filePath.split("/").pop();
+
+const fileStream = fs.createReadStream(filePath);
+
+const formData = new FormData();
+formData.append("file", fileStream, fileName);
+formdata.append("reference_source_link", "{reference_source_link}");
+
+axios
+  .post(apiUrl, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: "Bearer {api_key}",
+    },
+  })
+  .then((response) => {
+    console.log("File upload successful:", response.data);
+  })
+  .catch((error) => {
+    console.error("File upload failed:", error);
+  });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "created_at": "string",
+  "file_name": "string",
+  "file_size": 0,
+  "meta_json": "string",
+  "modified_at": "string",
+  "status": "string",
+  "title": "string",
+  "tokens": 0,
+  "type": "string",
+  "uuid": "string"
+}
+```
+
+</ResponseExample>

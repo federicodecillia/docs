@@ -1,0 +1,87 @@
+---
+title: "Weekday"
+api: "GET https://tools.gptchatbot.it/weekday"
+description: "This function finds the day of the week, given a date. For example, given the date '2024-10-07', it will return a JSON: `{'weekday': 'Monday'}`"
+---
+
+### Tool parameters
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "description": "The date in ISO 8601 format. For example, 2022-06-15 (June 15, 2022)."
+    }
+  },
+  "required": ["date"]
+}
+```
+
+Include default metadata: _False_
+
+### Path
+
+<ParamField path="date" type="string" required />
+
+### Response
+
+<ResponseField name="weekday" type="string" />
+
+<RequestExample>
+
+```bash Curl
+curl --location --request GET 'https://tools.gptchatbot.it/weekday?date=2024-10-10' \
+--header 'Authorization: Bearer <token>' \
+--data-raw ''
+```
+
+```py Python
+import requests
+
+url = 'https://tools.gptchatbot.it/weekday?date=2024-10-10'
+headers = {
+    'Authorization': 'Bearer <token>'
+}
+
+response = requests.get(url, headers=headers)
+
+if response.status_code == 200:
+    print("Request successful!")
+    print(response.text)
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require("axios");
+
+const url = "https://tools.gptchatbot.it/weekday?date=2024-10-10";
+const headers = {
+  Authorization: "Bearer <token>",
+};
+
+axios
+  .post(url, { headers })
+  .then((response) => {
+    console.log("Request successful!");
+    console.log(response.text);
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "weekday": "Thursday"
+}
+```
+
+</ResponseExample>

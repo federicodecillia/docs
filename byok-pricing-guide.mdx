@@ -1,0 +1,178 @@
+---
+title: Bring Your Own Key (BYOK) and Pricing
+---
+
+GPT Chatbot operates on a "pay as you go" basis. Rather than having Message Credits (MCs) baked into existing subscriptions, you
+buy them separately via add-ons or connect your own AI API keys to enjoy unlimited usage.
+
+If you use your own AI API keys, then after you exhaust all MCs inside your GPT Chatbot account, additional AI usage will be charged
+against your own API keys.
+
+## Setting up  BYOK
+
+To set up your own API key, you will first need to register on the AI provider's website. GPT Chatbot currently
+supports large language models (LLMs) from OpenAI, Anthropic, and Google. In the future, we plan to expand our list of supported
+models, potentially incorporating open-source and fine-tuned ones.
+
+### Provider-specific instructions
+
+* OpenAI (GPT models)- [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
+
+* Anthropic (Claude models) - [https://console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys)
+
+* Google (Gemini models) - [https://ai.google.dev/gemini-api/docs/api-key](https://ai.google.dev/gemini-api/docs/api-key)
+
+After you obtain your API key, store it in a **private and secure** location. GPT Chatbot recommends that you use a separate API
+key for each of your BYOK applications (including GPT Chatbot), and to never share your API key with anyone else.
+
+Next, log in to GPT Chatbot and go to the top right corner of the UI. Click the "Profile" icon the bring up a dropdown menu.
+
+<Frame>
+  <img src="/images/byok-pricing-guide-1.png" />
+</Frame>
+
+Then, click "Account". In the **"AI API Key"** section, pick your AI provider and paste your API key. Then click "Add".
+Please note that this is **not** the "GPT Chatbot API keys" section which is used to generate GPT Chatbot API keys.
+
+<Frame>
+  <img src="/images/byok-pricing-guide-3.png" />
+</Frame>
+
+You should be all set.
+
+<Note>
+  If this is the first time you create an API key with a provider, there is a
+  good chance that your key may be rate and feature limited. For example, as of
+  November 1, 2024, all new API keys registered with new OpenAI accounts are
+  prohibited from running GPT-4o model series. To lift this restriction, you may
+  need to add $5 credt and provide verified billing information within your
+  OpenAI account. Different providers may have different policies regarding
+  account verification.
+</Note>
+
+## Budgeting for AI usage
+
+In general, using your own API key will be more cost efficient than purchasing MC add-ons directly. To help you estimate costs
+associated with running your BYOK account, we provide the following references.
+
+<Note>
+  LLM providers change their pricing from time to time, so the information we
+  provide may not always be up-to-date. For latest information on pricing,
+  please visit: 
+  
+  - OpenAI (GPT models): https://openai.com/pricing 
+  - Anthropic (Claude models): https://www.anthropic.com/pricing#anthropic-api
+  - Google (Gemini models): https://ai.google.dev/pricing#1\_5flash
+</Note>
+
+The simplest estimate you can use is this:
+
+* Each Message Credit costs \~$0.0032 USD
+
+For example, GPT-4-1106-4k uses 20 MCs per query. To estimate the cost in USD, multiply $0.0032 \* 20 = $0.064 USD.
+
+This is a very rough estimate. Actual spend may be around +/- 20% of the estimated number. This is because LLM usage is measured
+based on "tokens", and input vs. output tokens cost different amounts even for the same LLM. To understand tokens, we
+refer you to this article: [https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them.](https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them.)
+
+There are many parts to a LLM query. At a high level, they can be broken down into:
+
+Input:
+
+* System prompt and metadata
+
+* User-defined base prompt
+
+* Variables and definitions
+
+* Conversation label definitions
+
+* Function metadata and descriptions
+
+* Function parameters
+
+* Function response
+
+* Static RAG context
+
+* Conversation memory
+
+Output:
+
+* Text response
+
+* Response metadata
+
+### OpenAI pricing breakdown
+
+GPT Chatbot supports a variety of OpenAI LLMs, as well as different versions of the same LLM with custom token limit cutoffs.
+To help you budget for your usage, we provide a summary based on our **default** split of reserved input vs. output tokens. Please refer
+to the following table (all $ are in USD). Please note that this generally represents an upper limit since not all input / output tokens
+in the reservation window are used every single LLM query.
+
+| Model           | Reserved for Input | Reserved for Output | Cost / Input Token | Cost / Output Token | Total Cost per Query |
+| --------------- | ------------------ | ------------------- | ------------------ | ------------------- | -------------------- |
+| GPT-3.5         | 2800               | 1200                | 0.0000005          | 0.0000015           | 0.0032               |
+| GPT-3.5-16k     | 13600              | 2400                | 0.0000005          | 0.0000015           | 0.0104               |
+| GPT-4o-mini-1k  | 800                | 200                 | 0.00000015         | 0.0000006           | 0.00024              |
+| GPT-4o-mini-2k  | 1600               | 400                 | 0.00000015         | 0.0000006           | 0.00048              |
+| GPT-4o-mini-4k  | 2800               | 1200                | 0.00000015         | 0.0000006           | 0.00114              |
+| GPT-4o-mini-8k  | 5600               | 2400                | 0.00000015         | 0.0000006           | 0.00228              |
+| GPT-4o-mini-16k | 12800              | 3200                | 0.00000015         | 0.0000006           | 0.00384              |
+| GPT-4o-mini-32k | 28000              | 4000                | 0.00000015         | 0.0000006           | 0.0066               |
+| GPT-4o-mini-64k | 60000              | 4000                | 0.00000015         | 0.0000006           | 0.0114               |
+| GPT-4o-1k       | 800                | 200                 | 0.0000025          | 0.00001             | 0.004                |
+| GPT-4o-2k       | 1600               | 400                 | 0.0000025          | 0.00001             | 0.008                |
+| GPT-4o-4k       | 2800               | 1200                | 0.0000025          | 0.00001             | 0.019                |
+| GPT-4o-8k       | 5600               | 2400                | 0.0000025          | 0.00001             | 0.038                |
+| GPT-4o-16k      | 12800              | 3200                | 0.0000025          | 0.00001             | 0.064                |
+| GPT-4o-32k      | 28000              | 4000                | 0.0000025          | 0.00001             | 0.11                 |
+| GPT-4o-64k      | 60000              | 4000                | 0.0000025          | 0.00001             | 0.19                 |
+| GPT-4-1106-1k   | 800                | 200                 | 0.00001            | 0.00003             | 0.014                |
+| GPT-4-1106-2k   | 1600               | 400                 | 0.00001            | 0.00003             | 0.028                |
+| GPT-4-1106-4k   | 2800               | 1200                | 0.00001            | 0.00003             | 0.064                |
+| GPT-4-0125-8k   | 5600               | 2400                | 0.00001            | 0.00003             | 0.128                |
+| GPT-4-1106-16k  | 12800              | 3200                | 0.00001            | 0.00003             | 0.224                |
+| GPT-4-1106-32k  | 28000              | 4000                | 0.00001            | 0.00003             | 0.4                  |
+| GPT-4-1106-64k  | 60000              | 4000                | 0.00001            | 0.00003             | 0.72                 |
+
+## BYOK for white-label commercial partners
+
+In addition to the costs for MC expenditures during LLM queries, you also need to pay to run our AI multi-agent framework using your
+own API key. This is independent of whether your users have supplied their API key for their personal accounts. Since the official GPT Chatbot
+subsidizes its users for all costs associated with running the AI framework, your white-label solution must operate with this premise
+as well.
+
+There are three separate workflows that require your own API key to cover your user's AI expenditures. The conditions under which they apply
+are listed below.
+
+1. AI Agent intent generation
+
+* Applicable if two or more AI Agents are connected
+
+* Charged whenever a new user-facing AI Agent goes live or an existing one is edited
+
+1. Query intent classification
+
+* Applicable if two or more user-facing Agents are connected
+
+* Charged on a per query basis
+
+1. Variable extraction
+
+* Applicable if AI Agent has one or more variables set up
+
+* Charged on a per query basis
+
+The estimated costs associated with each workflow is as follows:
+
+| Workflow                                         | Average Estimated Input | Average Estimated Output | Cost / Input Token | Cost / Output Token | Estimated Cost per Run |
+| ------------------------------------------------ | ----------------------- | ------------------------ | ------------------ | ------------------- | ---------------------- |
+| AI Agent intent generation (gpt-4-1106-preview)  | 600                     | 450                      | 0.00001            | 0.00003             | 0.0011                 |
+| Query intent classification (gpt-3.5-turbo-1106) | 1000                    | 50                       | 0.000001           | 0.000002            | 0.0195                 |
+| Variables extraction (gpt-3.5-turbo-1106)        | 1000                    | 100                      | 0.000001           | 0.000002            | 0.0012                 |
+
+All costs from the above workflow will be charged directly against your own API key. This cost cannot be transferred onto your clients.
+
+There may be more AI features in the future that require using your own API key. We will update the documentation as needed to help you plan ahead.
+However, in general, these extra API costs should be fairly negligible in comparison to AI costs associated with Message Credit expenditures.

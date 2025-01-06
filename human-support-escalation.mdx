@@ -1,0 +1,241 @@
+---
+title: Human Support Escalation
+---
+
+As powerful as AI chatbots can be, sometimes human accountability and expertise is still needed. GPT Chatbot's
+built-in human support escalation feature allows you or your collaborators to step in during any ongoing chat
+session and take over the conversation.
+
+## Set up Human Escalation
+
+Go to **Customizations** tab. Under the "Settings" section, Click "Human Support Handover".
+
+Toggle on "Enable Human Escalation". Then a number of configuration options should appear.
+
+<Frame>
+  <img src="/images/human-support-escalation-26.png" />
+</Frame>
+
+You can configure what the AI says when human escalation request is detected during the conversation, as well as
+what shows up when a human agent takes over or leaves the chat. For more advanced use cases, you can even define
+custom phrases or intents that the AI should be looking out for. If the AI responds with that phrase, your
+human agents will receive a notification immediately.
+
+To test your human support escalation setup, you'll need to generate a public link to the chatbot and access it
+using another browser tab. **The built-in "Preview" tab does NOT support human escalation testing.**
+
+Go to "Go Live" tab, click "Share". You may need to change your chatbot visibility settings temporarily
+in order to generate the link.
+
+<Frame>
+  <img src="/images/human-support-escalation-27.png" />
+</Frame>
+
+Once you have the link, open a new browser tab and navigate to it. Do not close the original GPT Chatbot tab.
+You should be taken to the chatbot as a typical user. You can then test it by submitting queries requesting human support.
+
+To take over as a human agent, head over to **Inbox** on the left navigation bar from your GPT Chatbot browser tab. You should see an orange dot
+next to the session requesting human support. Click it and you will be able to engage directly with the user. Simply start
+typing a response in the chat input text box at the bottom of the chat log.
+
+<Frame>
+  <img src="/images/human-support-escalation-28.png" />
+</Frame>
+
+As soon as you send the first message, AI Supervisor and all AI Agents will be disabled. You can have a direct conversation with your
+user for as long as you'd like. Once you are done, you can end the live chat session and put your user back on to the AI chatbot by clicking
+"End Live Chat".
+
+<Frame>
+  <img src="/images/human-support-escalation-29.png" />
+</Frame>
+
+You may stay and continue to monitor the user's interaction with the chatbot as the AI regains control over response generation.
+
+Depending on your use case, you may wish to fine tune the circumstances when the user should be redirected to a human agent. To do so, please
+review our documentation on [Fine Tuning Agent Intents](fine-tuning-agent-intents).
+
+## Updating Your Human Agent Avatar
+
+Each user account can have a single human avatar. This avatar shows up when that human agent takes over the chat session. Since
+GPT Chatbot supports multiple collaborators, many human agents can monitor the same chatbot and have their own avatars when responding
+to a user.
+
+To set up your own avatar, click the profile icon on the top right. You should see a dropdown menu:
+
+<Frame>
+  <img src="/images/human-support-escalation-30.png" />
+</Frame>
+
+Next, click "Account", followed by the pencil icon next to the avatar picture. You will be asked to select a photo from your computer.
+
+## Enable Human Support Notifications
+
+To receive alerts on human support requests, follow the steps below.
+
+### Turn on Alert Modes
+
+1. Go to **Customizations** tab on the left navigation bar.
+2. Enable Human Escalation Notifications toggle - This ensures that notifications related to user support requests are activated.
+3. Enable Notification Sound - Activate this option if you wish to receive an audible alert along with the notifications.
+
+### Browser Permissions
+
+Each web browser manages permissions for notifications and sounds on a per-website basis. To ensure that you receive notifications
+properly, you'll need to enable both permissions within your browser settings. To proceed forward:
+
+1. Launch your browser where you will use [GPT Chatbot platform](https://app.gptchatbot.it).
+2. Enable your browser permissions by choosing option bellow:
+
+<AccordionGroup>
+  <Accordion icon="chrome" title="Google Chrome" iconType="duotone">
+    <Steps>
+      <Step title="Settings">
+        Click on the button near url in the top-left corner, then select "Site
+        settings".
+        <Frame>
+          <img src="/images/human-support-escalation-9.png" />
+        </Frame>
+      </Step>
+      <Step title="Enable permissions">
+        Make sure that "Notifications" and "Sound" are set to Allow in
+        "Permissions settings".
+        <Frame>
+          <img src="/images/human-support-escalation-10.png" />
+        </Frame>
+      </Step>
+    </Steps>
+  </Accordion>
+
+{" "}
+
+<Accordion icon="firefox-browser" title="Firefox" iconType="duotone">
+  <Steps>
+    <Step title="Settings">
+      Click on the button near url in the top-left corner, then select
+      "Protection settings".
+      <Frame>
+        <img src="/images/human-support-escalation-11.png" />
+      </Frame>
+    </Step>
+    <Step title="Unblock GPT Chatbot">
+      Scroll to "Permissions" and adjust the default settings for "Speaker
+      Selection" and "Notifications". Ensure that the GPT Chatbot platform is
+      not blocked for both options.
+      <Frame>
+        <img src="/images/human-support-escalation-12.png" />
+      </Frame>
+    </Step>
+  </Steps>
+</Accordion>
+
+{" "}
+
+<Accordion icon="edge" title="Microsoft Edge" iconType="duotone">
+  <Steps>
+    <Step title="Settings">
+      Click on the button near url in the top-left corner, then select
+      “Permissions for this site”.
+      <Frame>
+        <img src="/images/human-support-escalation-13.png" />
+      </Frame>
+    </Step>
+    <Step title="Enable permissions">
+      Make sure that "Notifications" are set to Allow in "Permissions settings"
+      <Frame>
+        <img src="/images/human-support-escalation-14.png" />
+      </Frame>
+    </Step>
+  </Steps>
+</Accordion>
+
+  <Accordion icon="safari" title="Safari" iconType="duotone">
+    <Steps>
+      <Step title="GPT Chatbot settings">
+        Click on "Safari" in the top-left corner of your screen, then select
+        "Settings for app.gptchatbot.it".
+        <Frame>
+          <img src="/images/human-support-escalation-15.png" />
+        </Frame>
+      </Step>
+      <Step title="Enable pop-ups">
+        Make sure that "Pop-up Windows" are set to Allow.
+        <Frame>
+          <img src="/images/human-support-escalation-16.png" />
+        </Frame>
+      </Step>
+      <Step title="Settings">
+        Click on "Safari" in the top-left corner of your screen, then select
+        "Settings".
+        <Frame>
+          <img src="/images/human-support-escalation-17.png" />
+        </Frame>
+      </Step>
+      <Step title="Enable notifications">
+        In the "Websites" tab, choose "Notifications" option and make sure that
+        permissions are set to "Allow" for **app.gptchatbot.it**
+        <Frame>
+          <img src="/images/human-support-escalation-18.png" />
+        </Frame>
+      </Step>
+    </Steps>
+  </Accordion>
+</AccordionGroup>
+
+### Operating System Permissions
+
+Operating systems also have their own permissions that allow setting restrictions to notifications
+for different apps, including browsers. To enable notifications, choose your operating system below:
+
+<Note>If you are using **Safari**, you do not need to follow these steps.</Note>
+
+<AccordionGroup>
+  <Accordion icon="apple" title="Apple" iconType="duotone">
+    <Steps>
+      <Step title="Settings">
+        Click on the "Apple" in the top-left corner, then select "System
+        Settings".
+        <Frame>
+          <img src="/images/human-support-escalation-19.png" />
+        </Frame>
+      </Step>
+      <Step title="Browser notifications">
+        Choose "Notifications" option and select the browser you wish to use.
+        <Frame>
+          <img src="/images/human-support-escalation-20.png" />
+        </Frame>
+      </Step>
+      <Step title="Enable notifications">
+        Make sure that "Allow notifications" option is enabled.
+        <Frame>
+          <img src="/images/human-support-escalation-21.png" />
+        </Frame>
+      </Step>
+    </Steps>
+  </Accordion>
+
+  <Accordion icon="Windows" title="Windows" iconType="duotone">
+    <Steps>
+      <Step title="Settings">
+        In the search bar, type "notifications" and select the "Turn app
+        notifications on or off" option from the search results.
+        <Frame>
+          <img src="/images/human-support-escalation-22.png" />
+        </Frame>
+      </Step>
+      <Step title="System notifications">
+        Enable system notifications **(Optional)** and select your preferred
+        browser under "Notifications from apps and other senders" list.
+        <Frame>
+          <img src="/images/human-support-escalation-23.png" />
+        </Frame>
+      </Step>
+      <Step title="Browser notifications">
+        Make sure that "Notifications" are On for your browser.
+        <Frame>
+          <img src="/images/human-support-escalation-24.png" />
+        </Frame>
+      </Step>
+    </Steps>
+  </Accordion>
+</AccordionGroup>

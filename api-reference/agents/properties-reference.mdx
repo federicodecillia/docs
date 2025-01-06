@@ -1,0 +1,111 @@
+---
+title: "Agent Properties"
+description: "Detailed explanation of agent's properties"
+---
+
+<ParamField body="uuid" type="string">
+  Unique Id of the agent
+</ParamField>
+<ParamField body="name" type="string">
+  This is the name you use to refer to the agent in your list of agents.
+</ParamField>
+<ParamField body="description" type="string">
+  The description assists the AI in coordinating between user-facing agents by clarifying the purpose and functionality of each agent.
+</ParamField>
+<ParamField body="prompt" type="string">
+  The prompt helps the AI understand what you want and how to respond. It guides
+  the conversation and ensures relevant and coherent answers.
+</ParamField>
+<ParamField body="type" type="select">
+  The type of agent. Options are:
+  <p className="font-medium"><code>user-facing</code> : Agent directly interacts with users conversationally in a Q&A fashion. Only a single user-facing Agent engages with the user when a new query is input into the chatbot.</p>
+  <p className="font-medium"><code>background</code> : Agent never interacts with users directly and instead monitors the conversation in an ongoing fashion. All background Agents are run whenever the user submits a new query to the chatbot.</p>
+  <p className="font-medium"><code>human-escalation</code> : Agent routes the user’s query to a human. Only one human-escalation agent is allowed in each chatbot. It requires GPT Chatbot UI to fully use this feature. </p>
+  <p className="font-medium"><code>pre-canned</code> : Agent returns pre-canned response to user's query</p>
+  <p className="font-medium"><code>spam-defense</code> : Agent enables the spam defending feature for the chatbot. Only one spam-defnese agent is allowed in each chatbot</p>
+</ParamField>
+<ParamField body="enabled" type="boolean">
+  Indicates whether the agent is enabled or disabled. If disabled, the agent
+  will not be involved in the conversation.
+</ParamField>
+<ParamField body="modified_at" type="string">
+  Indicates agent modified time
+</ParamField>
+<ParamField body="created_at" type="string">
+  Indicates agent creation time
+</ParamField>
+<ParamField body="data_source_uuids" type="List[string]">
+  List of data sources UUIDs that the agent uses. If <code>use_all_sources</code> in agent's meta is set to true, this field will be disabled.<br/>
+  Only for <code>user-facing</code> agents.
+</ParamField>
+<ParamField body="human_escalation_settings" type="HumanEscalationSettings Object">
+  Human escalation settings for the agent. <br/>
+  Only for <code>human-escalation</code> agents.
+</ParamField>
+<ParamField body="tool_functions" type="List[ToolFunction]">
+  List of tool functions that the agent uses. <br/>
+  Only for <code>user-facing</code> and <code>background</code> agents.
+</ParamField>
+<ParamField body="variables" type="List[AgentVariable]">
+  List of variables that the agent uses. <br/>
+  Only for <code>user-facing</code> agents.
+</ParamField>
+
+
+<ParamField body="meta" type="meta Object">
+  Agent meta properties
+  <Expandable title="properties">
+    <ParamField body="model" type="select">
+
+| Model | Message Credits |
+|-------|-----------------|
+| gpt-3.5-turbo | 1 |
+| gpt-3.5-turbo-16k | 8 |
+| gpt-4-0125-preview-8k | 35 |
+| gpt-4-1106-preview-1k | 5 |
+| gpt-4-1106-preview-2k | 10 |
+| gpt-4-1106-preview-4k | 20 |
+| gpt-4-1106-preview-16k | 60 |
+| gpt-4o-1k | 3 |
+| gpt-4o-2k | 5 |
+| gpt-4o-4k | 10 |
+| gpt-4o-8k | 20 |
+| gpt-4o-16k | 40 |
+| gpt-4o-mini-4k | 1 |
+| gpt-4o-mini-16k | 8 |
+Only for <code>user-facing</code> and <code>background</code> agents.
+
+    </ParamField>
+    <ParamField body="temperature" type="float">
+      A higher temperature value, such as 1, allows for more randomness and
+      creativity in the responses. This can lead to more diverse and unexpected
+      answers. On the other hand, a lower temperature value, closer to 0, produces
+      more focused and deterministic responses, making them more conservative and
+      predictable. Options are values as a float between <code>0</code> and{" "}
+      <code>1</code><br/>
+      Only for <code>user-facing</code> agents.
+    </ParamField>
+
+    <ParamField body="bias" type="float">
+      How AI supervisor should be biased towards the agent. A higher value will make the AI supervisor more biased towards the agent. Options are values as a float between <code>0</code> and <code>1</code>.<br/>
+      Only for <code>user-facing</code>, <code>human-escalation</code>, <code>pre-canned</code> and <code>spam-defense</code> agents.
+    </ParamField>
+    <ParamField body="stickness" type="float">
+      How sticky the AI supervisor should be stick with the agent when the lastest user's query is handled by this agent. Options are values as a float between <code>0</code> and <code>1</code>.<br/> 
+      Only for <code>user-facing</code>, <code>human-escalation</code>, <code>pre-canned</code> and <code>spam-defense</code> agents.
+    </ParamField>
+
+    <ParamField body="default_message" type="string">
+      Default message to show when the agent is triggered. <br/>
+      Only for <code>pre-canned</code> and <code>spam-defense</code> agents.
+    </ParamField>
+    <ParamField body="tags" type="tags Object">
+      Tags defined for the agent. <br/>
+      Only for <code>background</code> agents.
+    </ParamField>
+    <ParamField body="use_all_sources" type="boolean">
+      Use all sources for the agent.<br/> 
+      Only for <code>user-facing</code> agents.
+    </ParamField>
+  </Expandable>
+</ParamField>

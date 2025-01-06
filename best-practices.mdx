@@ -1,0 +1,80 @@
+---
+title: Best practices for preparing training data
+---
+
+The accuracy and consistency of your chatbot depends on a number of factors:
+
+    - Quality of your training data
+    - Large language model (LLM) selection
+    - Explicitness of base prompt
+
+LLMs, like all statistics-based models, require training data during their construction. As they often say in the AI research community, “your model is only as good as your training data”.
+The best way to dictate and optimize your chatbot’s performance is to clean up its training data. In the following section, we provide some best practices for structuring your training data.
+
+LLMs do not “think” like humans do. They interpret and process data very differently from humans. To understand how the machine uses this data, we center our discussion on “chunks”.
+
+## Chunk splitting
+
+During RAG, chunks are selected and injected into the user’s original input query, along with the base prompt. These chunks are derived directly from your
+uploaded training data - PDFs, Word, websites, TXT files, etc. Since LLMs have token limits, we must also enforce constraints on the size of these chunks.
+
+This means that even if your original document has a long chapter of text that talks about a single topic, it will have to be divided into multiple chunks and stored separately within our vector database.
+
+So how can we divide up the document with minimal alterations to its original meaning?
+
+Unfortunately there is no universal solution. This is still an ongoing field of scientific research. GPT Chatbot uses a combination of rule-based and statistical
+relevance algorithms to divide training data into chunks, but we cannot always guarantee each chunk is self-contained, clean, and accurate. Fortunately, LLMs
+specialize in working with unstructured text, and they have high tolerances for badly formatted input when producing responses.
+
+## Chunk quality
+
+Another source of error comes from the chunk content itself. Optimally, each chunk should be self-contained, semantically self-consistent, and grammatically
+correct. If document structure is important, each chunk should also have relevant metadata specifying where in the document it comes from. However,
+none of this can be guaranteed when chunks are initially extracted from uploaded text.
+
+This error is especially pronounced when working with websites. Since web browsers render websites very differently from how web scraper sees them, what
+you see can be very different from what our scraper captures. Furthermore, most layout information and data residing in images / illustrations / videos are lost during the scraping process.
+
+## No gaps, no overlaps
+
+RAG relies on dynamically fetching a subset of reference data from the entire collection of training materials.
+To identify which chunks contain the most relevant information, the user query goes through the same embedding process
+as the chunks themselves. Then, we calculate a relevance score for every chunk based on the proximity of their embedding
+vectors relative to the user’s input (cosine distance). Afterwards, the chunks are ranked, and our algorithm picks the top
+n chunks that can fit into the reserved token window for the chosen LLM.
+
+Since the algorithm tries to discover and fit as many relevant chunks as possible, there is the possibility that chunks
+containing semantically similar, but factually inconsistent information are simultaneously injected into the reference context of the LLM call.
+
+For example, if the user asks:
+
+**_What is the price of iPhone SE?_**
+
+then, the algorithm may pull the following chunks to serve as reference context:
+
+    > [Chunk 1] iPhone SE’s current price is $250.
+    >
+    > [Chunk 2] Original iPhone SE is $199.
+    >
+    > [Chunk 3] iPhone 5’s price is $600.
+
+As you can see, these chunks all explicitly mention the price of iPhone SE, so they are semantically similar to the user’s original query.
+However, they contain factually inconsistent information. When this happens, you may notice the AI generating different responses each
+time even if the same question was asked.
+
+To ensure better consistency, we recommend that you adopt a “MECE” approach when uploading your training data. MECE stands for Mutually
+Exclusive, Collectively Exhaustive. In other words - no gaps, no overlaps. If your training data is structured in this way, then you minimize
+the chances of conflicting information being fed to the LLM during RAG, thereby ensuring that your chatbot behaves in a more predictable and intended fashion.
+
+## Remove unnecessary training data
+
+RAG works by matching semantically similar chunks to the user’s input query. Since LLMs have token restrictions, we can only
+fit a limited number of chunks to serve as reference context. Therefore, if your overall knowledge base is large, then the percentage of
+information that can be pulled into the LLM query each time is small.
+
+For instance, if you have 20 chunks worth of training data and the LLM can pull in 10 chunks to serve as reference context each time, then
+each user query can make use of 50% of the entire knowledge base. On the other hand, if you have 2000 chunks total, then each user query can o
+nly pull 0.5% of the entire knowledge base.
+
+Larger knowledge bases make it less likely for the RAG algorithm to identify relevant information. Rather than dumping everything in, having a
+focused set of training data significantly improves the chatbot’s performance.
