@@ -43,11 +43,6 @@
       },
       "url": "tools"
     },
-    {
-      "name": "Whitelabel",
-      "icon": "browser",
-      "url": "whitelabel"
-    }
   ],
   "navigation": [
     {
@@ -160,22 +155,6 @@
     {
       "group": "Tools",
       "pages": ["tools/weekday"]
-    },
-    {
-      "group": "Whitelabel Dashboard",
-      "pages": [
-        "whitelabel/whitelabel-intro",
-        "whitelabel/whitelabel-plans",
-        "whitelabel/whitelabel-users"
-      ]
-    },
-    {
-      "group": "Integrations",
-      "pages": [
-        "whitelabel/whitelabel-zapier",
-        "whitelabel/whitelabel-make",
-        "whitelabel/whitelabel-meta"
-      ]
     }
   ],
   "api": {
