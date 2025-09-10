@@ -19,18 +19,29 @@ description: "Create a chat session for a chatbot specified by chatbot uuid"
 
 ### Response
 
-<ResponseField name="created_at" type="string" required />
-<ResponseField name="modified_at" type="string" required />
-<ResponseField name="uuid" type="string" required />
-<ResponseField name="initial_variables" type="object" />
+<ResponseField name="created_at" type="string" required>
+  
+</ResponseField>
+
+<ResponseField name="modified_at" type="string" required>
+  
+</ResponseField>
+
+<ResponseField name="uuid" type="string" required>
+  
+</ResponseField>
+
+<ResponseField name="initial_variables" type="object">
+  
+</ResponseField>
 
 <RequestExample>
 
 ```bash Curl
 curl --location --request POST 'https://app.gpt-trainer.com/api/v1/chatbot/{uuid}/session/create' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer <token>' \
 ```
+
 
 ```py Python
 import requests
@@ -39,7 +50,6 @@ uuid = '<chatbot-uuid>'
 url = f'https://app.gpt-trainer.com/api/v1/chatbot/{uuid}/session/create'
 headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer <token>'
 }
 
 response = requests.post(url,  headers=headers)
@@ -52,6 +62,7 @@ else:
     print(response.text)
 ```
 
+
 ```ts JavaScript
 const axios = require("axios");
 
@@ -59,7 +70,6 @@ const uuid = "<chatbot-uuid>";
 const url = `https://app.gpt-trainer.com/api/v1/chatbot/${uuid}/session/create`;
 const headers = {
   "Content-Type": "application/json",
-  Authorization: "Bearer <token>",
 };
 
 axios
