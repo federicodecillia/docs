@@ -162,5 +162,8 @@
     "auth": {
       "method": "bearer"
     }
+  },
+  "ga4": {
+    "googleAnalytics": "G-03HD3YDTPP"
   }
 }
