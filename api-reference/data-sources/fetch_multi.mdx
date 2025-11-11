@@ -6,24 +6,26 @@ description: "Fetch the list of sources for a chatbot specified by chatbot uuid"
 
 ### Path
 
-<ParamField path="uuid" type="string" required/>
+<ParamField path="uuid" type="string" required>
+  Chatbot uuid
+</ParamField>
 
 ### Response
 
 <ResponseField name="" type="object[]">
-Source list
-<Expandable title="Source properties">
-<ResponseField name="uuid" type="string"/>
-<ResponseField name="created_at" type="string"/>
-<ResponseField name="modified_at" type="string"/>
-<ResponseField name="title" type="string"/>
-<ResponseField name="tokens" type="string"/>
-<ResponseField name="file_size" type="string"/>
-<ResponseField name="file_name" type="string"/>
-<ResponseField name="type" type="string"/>
-<ResponseField name="status" type="string"/>
-<ResponseField name="meta_json" type="string"/>
-</Expandable>
+  Source list
+  <Expandable title="Source properties">
+    <ResponseField name="uuid" type="string" />
+    <ResponseField name="created_at" type="string" />
+    <ResponseField name="modified_at" type="string" />
+    <ResponseField name="title" type="string" />
+    <ResponseField name="tokens" type="string" />
+    <ResponseField name="file_size" type="string" />
+    <ResponseField name="file_name" type="string" />
+    <ResponseField name="type" type="string" />
+    <ResponseField name="status" type="string" />
+    <ResponseField name="meta_json" type="string" />
+  </Expandable>
 </ResponseField>
 
 <RequestExample>
@@ -53,22 +55,23 @@ else:
 ```
 
 ```ts JavaScript
-const axios = require('axios');
+const axios = require("axios");
 
-const uuid = '<chatbot-uuid>'
+const uuid = "<chatbot-uuid>";
 const url = `https://app.gptchatbot.it/api/v1/chatbot/${uuid}/data-sources`;
 const headers = {
-    'Authorization': 'Bearer <token>'
+  Authorization: "Bearer <token>",
 };
 
-axios.get(url, { headers })
-    .then(response => {
-        console.log('Request successful!');
-        console.log(response.data);
-    })
-    .catch(error => {
-        console.error('Request failed:', error);
-    });
+axios
+  .get(url, { headers })
+  .then((response) => {
+    console.log("Request successful!");
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
 ```
 
 </RequestExample>
@@ -90,7 +93,6 @@ axios.get(url, { headers })
     "uuid": "string"
   }
 ]
-
 ```
 
 </ResponseExample>

@@ -12,19 +12,19 @@ Chatbot list
 <ResponseField name="created_at" type="string"/>
 
 <ResponseField name="meta" type="object">
-The meta of chatbot
-<Expandable title="Toggle object">
-<ResponseField name="rate_limit" type="[number, number]"/>
-<ResponseField name="rate_limit_message" type="string"/>
-<ResponseField name="show_citation" type="boolean"/>
-<ResponseField name="visibility" type="string"/>
-</Expandable>
+  The meta of chatbot
+  <Expandable title="Toggle object">
+    <ResponseField name="rate_limit" type="[number, number]" />
+    <ResponseField name="rate_limit_message" type="string" />
+    <ResponseField name="show_citation" type="boolean" />
+    <ResponseField name="visibility" type="string" />
+  </Expandable>
 </ResponseField>
 
-<ResponseField name="modified_at" type="string"/>
+<ResponseField name="modified_at" type="string" />
 
-<ResponseField name="name" type="string"/>
-<ResponseField name="uuid" type="string"/>
+<ResponseField name="name" type="string" />
+<ResponseField name="uuid" type="string" />
 
 </Expandable>
 </ResponseField>
@@ -55,21 +55,22 @@ else:
 ```
 
 ```ts JavaScript
-const axios = require('axios');
+const axios = require("axios");
 
-const url = 'https://app.gptchatbot.it/api/v1/chatbots';
+const url = "https://app.gptchatbot.it/api/v1/chatbots";
 const headers = {
-    'Authorization': 'Bearer <token>'
+  Authorization: "Bearer <token>",
 };
 
-axios.get(url, { headers })
-    .then(response => {
-        console.log('Request successful!');
-        console.log(response.data);
-    })
-    .catch(error => {
-        console.error('Request failed:', error);
-    });
+axios
+  .get(url, { headers })
+  .then((response) => {
+    console.log("Request successful!");
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
 ```
 
 </RequestExample>
@@ -78,23 +79,19 @@ axios.get(url, { headers })
 
 ```json Response
 [
-    {
-        "created_at": "string",
-        "meta": {
-            "rate_limit": [
-            20,
-            240
-            ],
-            "rate_limit_message": "Too many messages",
-            "show_citations": false,
-            "visibility": "private"
-        },
-        "modified_at": "string",
-        "name": "string",
-        "uuid": "string"
-    }
+  {
+    "created_at": "string",
+    "meta": {
+      "rate_limit": [20, 240],
+      "rate_limit_message": "Too many messages",
+      "show_citations": false,
+      "visibility": "private"
+    },
+    "modified_at": "string",
+    "name": "string",
+    "uuid": "string"
+  }
 ]
-
 ```
 
 </ResponseExample>

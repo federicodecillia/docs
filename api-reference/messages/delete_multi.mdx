@@ -6,14 +6,15 @@ description: "Delete list of messages base on their uuids"
 
 ### Body
 
-<ParamField body="uuids" type="string[]" required/>
+<ParamField path="uuids" type="string[]" required>
+  Messages uuids
+</ParamField>
 
 ### Response
 
 <ResponseField name="success" type="boolean">
   Indicates if api call was successful
 </ResponseField>
-
 
 <RequestExample>
 
@@ -49,25 +50,26 @@ else:
 ```
 
 ```ts JavaScript
-const axios = require('axios');
+const axios = require("axios");
 
-const url = 'https://app.gptchatbot.it/api/v1/messages/delete';
+const url = "https://app.gptchatbot.it/api/v1/messages/delete";
 const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer <token>'
-};;
-
-const data = {
-    "uuids": []
+  "Content-Type": "application/json",
+  Authorization: "Bearer <token>",
 };
 
-axios.post(url, data, { headers })
-    .then(response => {
-        console.log('Request successful! Messages deleted.');
-    })
-    .catch(error => {
-        console.error('Request failed:', error);
-    });
+const data = {
+  uuids: [],
+};
+
+axios
+  .post(url, data, { headers })
+  .then((response) => {
+    console.log("Request successful! Messages deleted.");
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
 ```
 
 </RequestExample>
@@ -78,7 +80,6 @@ axios.post(url, data, { headers })
 {
   "success": true
 }
-
 ```
 
 </ResponseExample>

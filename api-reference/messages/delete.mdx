@@ -6,14 +6,15 @@ description: "Delete single message base on uuid"
 
 ### Path
 
-<ParamField path="uuid" type="string" required/>
+<ParamField path="uuid" type="string" required>
+  Message uuid
+</ParamField>
 
 ### Response
 
 <ResponseField name="success" type="boolean">
   Indicates if api call was successful
 </ResponseField>
-
 
 <RequestExample>
 
@@ -41,21 +42,22 @@ else:
 ```
 
 ```ts JavaScript
-const axios = require('axios');
+const axios = require("axios");
 
-const uuid = '<message-uuid>'
+const uuid = "<message-uuid>";
 const url = `https://app.gptchatbot.it/api/v1/message/${uuid}/delete`;
 const headers = {
-    'Authorization': 'Bearer <token>'
+  Authorization: "Bearer <token>",
 };
 
-axios.post(url, { headers })
-    .then(response => {
-        console.log('Request successful! Message deleted.');
-    })
-    .catch(error => {
-        console.error('Request failed:', error);
-    });
+axios
+  .post(url, { headers })
+  .then((response) => {
+    console.log("Request successful! Message deleted.");
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
 ```
 
 </RequestExample>
@@ -66,7 +68,6 @@ axios.post(url, { headers })
 {
   "success": true
 }
-
 ```
 
 </ResponseExample>

@@ -33,6 +33,11 @@
       "url": "api-reference"
     },
     {
+      "name": "Integrations",
+      "icon": "network-wired",
+      "url": "integrations"
+    },
+    {
       "name": "Tools",
       "icon": "gear",
       "api": {
@@ -111,8 +116,7 @@
         "api-reference/sessions/create",
         "api-reference/sessions/fetch",
         "api-reference/sessions/fetch_multi",
-        "api-reference/sessions/delete",
-        "api-reference/sessions/delete_multi"
+        "api-reference/sessions/delete"
       ]
     },
     {
@@ -121,6 +125,7 @@
         "api-reference/messages/properties-reference",
         "api-reference/messages/create",
         "api-reference/messages/fetch_multi",
+        "api-reference/messages/fetch-message-history",
         "api-reference/messages/delete",
         "api-reference/messages/delete_multi"
       ]

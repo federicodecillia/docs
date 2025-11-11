@@ -1,0 +1,124 @@
+---
+title: "Meta Integration Process"
+---
+
+To integrate Meta (Facebook Messenger, Instagram, and WhatsApp) with your GPT-trainer, follow these steps:
+
+## 1. Create a Meta App
+
+First, you need to create a Meta App of the "Business" type to access the necessary messaging APIs. Refer to [Meta's guide](https://developers.facebook.com/docs/development/create-an-app/other-app-types) for detailed instructions on how to do this.
+
+## 2. Obtain App Secrets
+
+Once your Meta App is created, navigate to the "App settings" section in your Meta App Dashboard. Here, you will find your **App ID** and **App Secret**. Copy these values and paste them into the "Integrations" tab of your GPT-trainer Partners Dashboard.
+
+You also need to generate a **Verification Token**. This can be any secure alphanumeric string (at least 32 characters is recommended). You can use a password generator for this. Enter this token in the designated field within the GPT-trainer Partners Dashboard and save it for your records.
+
+## 3. Add Products to Your App
+
+In your Meta App Dashboard, go to the main **Dashboard** page and add the following products to your app:
+
+- **Facebook Login for Business**
+- **Messenger**
+- **WhatsApp for Business**
+- **Instagram**
+
+## 4. Configure Webhooks
+
+Navigate to the **Webhooks** section of your Meta App. You will need to configure webhook subscriptions for **Pages**, **Instagram**, and **WhatsApp Business**. Ensure you are using **API version 20.0** for all webhooks.
+
+For each of the following subscriptions:
+
+1. Click **Edit Configuration**.
+   - **Callback URL**: Enter the following URL, replacing `<your-domain>` with your actual domain:
+
+     ```
+     https://<your-domain>/messenger/webhook
+     ```
+   - **Verification Token**: Use the verification token you previously saved in the GPT-trainer Partners Dashboard.
+2. **Test** the **messages** webhook. You should see the message:
+
+   > "The sample update was successfully sent to your server."
+   > Then click **Subscribe** on **Messages**.
+3. If you experience duplicated messages after testing, **unsubscribe** from **Messages** and try the test and subscription again.
+
+## 5. Configure Facebook Login for Business
+
+Go to **Facebook Login for Business → Configurations** in your Meta App Dashboard and create three separate configurations:
+
+1. **Messenger**
+   - **Login Variation**: General
+   - **Access Token**: User Access Token
+   - **Authorizations**:
+
+     ```
+     pages_messaging
+     instagram_basic
+     instagram_manage_messages
+     pages_show_list
+     business_management
+     pages_manage_metadata
+     pages_read_engagement
+     ```
+2. **Instagram**
+   - **Login Variation**: General
+   - **Access Token**: User Access Token
+   - **Authorizations**:
+
+     ```
+     pages_messaging
+     pages_show_list
+     pages_manage_metadata
+     pages_read_engagement
+     instagram_basic
+     instagram_manage_messages
+     business_management
+     ```
+3. **WhatsApp**
+   - **Login Variation**: whatsapp_embedded_signup
+   - **Resources**: WhatsApp account
+   - **Authorizations**:
+
+     ```
+     whatsapp_business_management
+     whatsapp_business_messaging
+     business_management
+     pages_manage_metadata
+     pages_show_list
+     ```
+
+For each integration you wish to add (Facebook Messenger, Instagram, or WhatsApp), copy the **Configuration ID** found under the respective configuration in the "Facebook Login for Business" tab and paste it into your GPT-trainer Partners Dashboard.
+
+## 6. Please enter your white label platform.
+
+Then, connect the associated meta app with a demo account (WhatsApp, Messenger, Instagram); you will need separate connections for separate apps, but they can all connect to the same chatbot.
+
+Then, make an API call by sending a message. The message may not appear.
+
+> Note: Only after connecting the demo account can you access step 6; you may need to wait for 24 hours after connecting and making a successful API call before Step 6 becomes available to you
+
+## 7. Request Advanced Access
+
+You will need to request **Advanced Access** for the following permissions by filling out the necessary form in your Meta App Dashboard:
+
+ 1. `pages_messaging`
+ 2. `pages_manage_metadata`
+ 3. `public_profile`
+ 4. `pages_show_list`
+ 5. `whatsapp_business_messaging`
+ 6. `instagram_basic`
+ 7. `instagram_manage_messages`
+ 8. `business_management`
+ 9. `pages_read_engagement`
+10. `whatsapp_business_management`
+
+**Important Notes for Approval:**
+
+1. To increase the likelihood of Meta's approval, include clear videos with on-screen text instructions demonstrating your integration setup.
+2. For `whatsapp_business_management` approval, your video must explicitly show the creation of an **ice-breaker** under: https://developers.facebook.com/docs/whatsapp/cloud-api/phone-numbers/conversational-components#ice-breakers
+
+## 8. Integrating with Existing Stripe Plans (Optional)
+
+If you want to add Meta integrations to existing Stripe plans, ensure the metadata key `meta_integration` is set to `True` for those plans.
+
+> **Credit to Federico De Cillia**
