@@ -6,28 +6,68 @@ description: "Fetch the list of sessions for a chatbot specified by chatbot uuid
 
 ### Path
 
-<ParamField path="uuid" type="string" required/>
+<ParamField path="uuid" type="string" required>
+  Chatbot uuid
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="start_timestamp" type="string">
+  Filter sessions created after this timestamp (inclusive).\
+  Format: ISO 8601 — `YYYY-MM-DDTHH:mm:ss.sssZ`
+</ParamField>
+
+<ParamField query="end_timestamp" type="string">
+  Filter sessions created before this timestamp (inclusive).\
+  Format: ISO 8601 — `YYYY-MM-DDTHH:mm:ss.sssZ`
+</ParamField>
+
+#### Timestamp Format
+
+The API uses [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format for timestamps:
+
+- Format: `YYYY-MM-DDTHH:mm:ss.sssZ`
+- Example:
+  - `start_timestamp=2025-07-16T07:00:00.000Z` means July 16, 2025 at 7:00 AM UTC
+  - `end_timestamp=2025-07-24T06:59:59.000Z` means July 24, 2025 at 6:59:59 AM UTC
+
+#### Usage Tips
+
+- Always use UTC timezone (`Z` at the end)
+- Include milliseconds (`.000`) even if zero
+- Use 24-hour time format
+- Don’t forget the `T` separator between date and time
+- URL-encode the entire value if passing in a URL manually
 
 ### Response
 
-<ResponseField name="" type="object[]">
-Session list
-<Expandable title="Session properties">
-<ResponseField name="created_at" type="string"/>
-<ResponseField name="modified_at" type="string"/>
-<ResponseField name="uuid" type="string"/>
-<ResponseField name="meta" type="meta Object">
-  Session meta properties
-  <Expandable title="properties">
-    <ResponseField name="user" type="user Object">
-      Exists when lead form was submitted by user
+<ResponseField name type="object[]">
+  Session list
+
+  <Expandable title="Session properties">
+    <ResponseField name="created_at" type="string">
+
     </ResponseField>
-    <ResponseField name="auth_data" type="auth_data Object">
-      Exists when user completes "User Identity Verification" and "Save Data on Success" feature is enabled
+    <ResponseField name="modified_at" type="string">
+
+    </ResponseField>
+    <ResponseField name="uuid" type="string">
+
+    </ResponseField>
+    <ResponseField name="meta" type="meta Object">
+      Session meta properties
+
+      <Expandable title="properties">
+        <ResponseField name="user" type="user Object">
+          Exists when lead form was submitted by user
+        </ResponseField>
+        <ResponseField name="auth_data" type="auth_data Object">
+          Exists when user completes "User Identity Verification" and "Save Data
+          on Success" feature is enabled
+        </ResponseField>
+      </Expandable>
     </ResponseField>
   </Expandable>
-</ResponseField>
-</Expandable>
 </ResponseField>
 
 <RequestExample>
@@ -37,11 +77,14 @@ curl --location --request GET 'https://app.gptchatbot.it/api/v1/chatbot/{uuid}/s
 --header 'Authorization: Bearer <token>'
 ```
 
+
 ```py Python
 import requests
 
 uuid = '<chatbot-uuid>'
-url = f'https://app.gptchatbot.it/api/v1/chatbot/{uuid}/sessions'
+start_timestamp = '<timestamp>'
+end_timestamp = '<timestamp>'
+url = f'https://app.gptchatbot.it/api/v1/chatbot/{uuid}/sessions?start_timestamp={start_timestamp}&end_timestamp={end_timestamp}'
 headers = {
     'Authorization': 'Bearer <token>'
 }
@@ -56,23 +99,27 @@ else:
     print(response.text)
 ```
 
-```ts JavaScript
-const axios = require('axios');
 
-const uuid = '<chatbot-uuid>'
-const url = `https://app.gptchatbot.it/api/v1/chatbot/${uuid}/sessions`;
+```ts JavaScript
+const axios = require("axios");
+
+const uuid = "<chatbot-uuid>";
+const start_timestamp = '<timestamp>'
+const end_timestamp = '<timestamp>'
+const url = `https://app.gptchatbot.it/api/v1/chatbot/${uuid}/sessions?start_timestamp=${start_timestamp}&end_timestamp=${end_timestamp}`;
 const headers = {
-    'Authorization': 'Bearer <token>'
+  Authorization: "Bearer <token>",
 };
 
-axios.get(url, { headers })
-    .then(response => {
-        console.log('Request successful!');
-        console.log(response.data);
-    })
-    .catch(error => {
-        console.error('Request failed:', error);
-    });
+axios
+  .get(url, { headers })
+  .then((response) => {
+    console.log("Request successful!");
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
 ```
 
 </RequestExample>
@@ -81,13 +128,12 @@ axios.get(url, { headers })
 
 ```json Response
 [
-    {
-        "created_at": "string",
-        "modified_at": "string",
-        "uuid": "string"
-    }
+  {
+    "created_at": "string",
+    "modified_at": "string",
+    "uuid": "string"
+  }
 ]
-
 ```
 
 </ResponseExample>

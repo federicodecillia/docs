@@ -1,0 +1,74 @@
+---
+title: "Fetch Session History"
+api: "GET https://app.gpt-trainer.com/api/v1/session/{uuid}/messages/plain-text"
+description: "Retrieve the session's chat log as a simple text transcript."
+---
+
+### Path
+
+<ParamField path="uuid" type="string" required>
+  Session uuid
+</ParamField>
+
+### Response
+
+<ResponseField name="Plain Text" type="string" />
+
+<RequestExample>
+
+```bash Curl
+curl --location --request GET 'https://app.gpt-trainer.com/api/v1/session/{uuid}/messages/plain-text' \
+--header 'Authorization: Bearer <token>'
+```
+
+```py Python
+import requests
+
+uuid = '<session-uuid>'
+url = f'https://app.gpt-trainer.com/api/v1/session/{uuid}/messages/plain-text'
+headers = {
+    'Authorization': 'Bearer <token>'
+}
+
+response = requests.get(url, headers=headers)
+
+if response.status_code == 200:
+    print("Request successful!")
+    print(response.json())
+else:
+    print("Request failed with status code:", response.status_code)
+    print(response.text)
+```
+
+```ts JavaScript
+const axios = require("axios");
+
+const uuid = "<session-uuid>";
+const url = `https://app.gpt-trainer.com/api/v1/session/${uuid}/messages/plain-text`;
+const headers = {
+  Authorization: "Bearer <token>",
+};
+
+axios
+  .get(url, { headers })
+  .then((response) => {
+    console.log("Request successful!");
+    console.log(response);
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+    User: [query]
+    Assistant: [response]
+    User: [query]
+    Assistant: [response]
+```
+
+</ResponseExample>

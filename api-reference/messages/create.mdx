@@ -13,24 +13,30 @@ description: "Create a session message for a chatbot session specified by sessio
 
 ### Path
 
-<ParamField path="uuid" type="string" required />
+<ParamField path="uuid" type="string" required>
+  Session uuid
+</ParamField>
 
 ### Body
 
-<ParamField body="query" type="string" required />
+<ParamField body="query" type="string" required>
+
+</ParamField>
 
 ### Response
 
-<ResponseField type="string" />
+<ResponseField type="string">
+
+</ResponseField>
 
 <RequestExample>
 
 ```bash Curl
 curl --location --request POST 'https://app.gptchatbot.it/api/v1/session/{uuid}/message/stream' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer <token>' \
 --data-raw '{"query": "Your query goes here"}'
 ```
+
 
 ```py Python
 import requests
@@ -38,7 +44,6 @@ import requests
 uuid = '<session-uuid>'
 url = f"https://app.gptchatbot.it/api/v1/session/{uuid}/message/stream"
 headers = {
-    "Authorization": "Bearer <token>",
     "Content-Type": "application/json"
 }
 
@@ -56,6 +61,7 @@ else:
     print("Error:", response.status_code)
 ```
 
+
 ```ts JavaScript
 const xhr = new XMLHttpRequest();
 const uuid = "<session-uuid>";
@@ -65,7 +71,6 @@ xhr.open(
   true
 );
 
-xhr.setRequestHeader("Authorization", "Bearer <token>");
 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
 const data = JSON.stringify({ query: "Your query goes here" });

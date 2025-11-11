@@ -6,22 +6,24 @@ description: "Fetch the list of messages for a session specified by session uuid
 
 ### Path
 
-<ParamField path="uuid" type="string" required/>
+<ParamField path="uuid" type="string" required>
+  Session uuid
+</ParamField>
 
 ### Response
 
 <ResponseField name="" type="object[]">
-Message list
-<Expandable title="Message properties">
-<ResponseField name="uuid" type="string"/>
-<ResponseField name="created_at" type="string"/>
-<ResponseField name="modified_at" type="string"/>
-<ResponseField name="finish_reason" type="string"/>
-<ResponseField name="cite_data_json" type="string"/>
-<ResponseField name="meta_json" type="string"/>
-<ResponseField name="query" type="string"/>
-<ResponseField name="response" type="string"/>
-</Expandable>
+  Message list
+  <Expandable title="Message properties">
+    <ResponseField name="uuid" type="string" />
+    <ResponseField name="created_at" type="string" />
+    <ResponseField name="modified_at" type="string" />
+    <ResponseField name="finish_reason" type="string" />
+    <ResponseField name="cite_data_json" type="string" />
+    <ResponseField name="meta_json" type="string" />
+    <ResponseField name="query" type="string" />
+    <ResponseField name="response" type="string" />
+  </Expandable>
 </ResponseField>
 
 <RequestExample>
@@ -51,22 +53,23 @@ else:
 ```
 
 ```ts JavaScript
-const axios = require('axios');
+const axios = require("axios");
 
-const uuid = '<session-uuid>'
+const uuid = "<session-uuid>";
 const url = `https://app.gptchatbot.it/api/v1/session/${uuid}/messages`;
 const headers = {
-    'Authorization': 'Bearer <token>'
+  Authorization: "Bearer <token>",
 };
 
-axios.get(url, { headers })
-    .then(response => {
-        console.log('Request successful!');
-        console.log(response.data);
-    })
-    .catch(error => {
-        console.error('Request failed:', error);
-    });
+axios
+  .get(url, { headers })
+  .then((response) => {
+    console.log("Request successful!");
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
 ```
 
 </RequestExample>
@@ -86,7 +89,6 @@ axios.get(url, { headers })
     "uuid": "string"
   }
 ]
-
 ```
 
 </ResponseExample>

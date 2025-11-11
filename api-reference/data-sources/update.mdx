@@ -6,24 +6,26 @@ description: "Update source meta base on uuid"
 
 ### Path
 
-<ParamField path="uuid" type="string" required/>
+<ParamField path="uuid" type="string" required>
+  Source uuid
+</ParamField>
 
 ### Body
 
-<ParamField body="title" type="string" required/>
+<ParamField body="title" type="string" required />
 
 ### Response
 
-<ResponseField name="created_at" type="string"/>
-<ResponseField name="file_name" type="string"/>
-<ResponseField name="file_size" type="number"/>
-<ResponseField name="meta_json" type="string"/>
-<ResponseField name="modified_at" type="string"/>
-<ResponseField name="status" type="string"/>
-<ResponseField name="title" type="string"/>
-<ResponseField name="type" type="string"/>
-<ResponseField name="tokens" type="number"/>
-<ResponseField name="uuid" type="string"/>
+<ResponseField name="created_at" type="string" />
+<ResponseField name="file_name" type="string" />
+<ResponseField name="file_size" type="number" />
+<ResponseField name="meta_json" type="string" />
+<ResponseField name="modified_at" type="string" />
+<ResponseField name="status" type="string" />
+<ResponseField name="title" type="string" />
+<ResponseField name="type" type="string" />
+<ResponseField name="tokens" type="number" />
+<ResponseField name="uuid" type="string" />
 
 <RequestExample>
 
@@ -61,27 +63,28 @@ else:
 ```
 
 ```ts JavaScript
-const axios = require('axios');
+const axios = require("axios");
 
-const uuid = '<source-uuid>'
+const uuid = "<source-uuid>";
 const url = `https://app.gptchatbot.it/api/v1/data-source/${uuid}/update`;
 const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer <token>'
+  "Content-Type": "application/json",
+  Authorization: "Bearer <token>",
 };
 
 const data = {
-    "title": "string",
+  title: "string",
 };
 
-axios.post(url, data, { headers  })
-    .then(response => {
-        console.log('Request successful!');
-        console.log(response.data);
-    })
-    .catch(error => {
-        console.error('Request failed:', error);
-    });
+axios
+  .post(url, data, { headers })
+  .then((response) => {
+    console.log("Request successful!");
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.error("Request failed:", error);
+  });
 ```
 
 </RequestExample>
@@ -101,7 +104,6 @@ axios.post(url, data, { headers  })
   "type": "string",
   "uuid": "string"
 }
-
 ```
 
 </ResponseExample>
