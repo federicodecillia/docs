@@ -1,0 +1,124 @@
+name: Sync Upstream & Rebrand
+
+on:
+  schedule:
+    # 1st of every month at 08:00 UTC
+    - cron: "0 8 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/ks-collab/gpt-trainer-docs.git || true
+          git fetch upstream
+
+      - name: Check for new upstream commits
+        id: check
+        run: |
+          UPSTREAM_SHA=$(git rev-parse upstream/main)
+          MERGE_BASE=$(git merge-base HEAD upstream/main 2>/dev/null || echo "none")
+          if [ "$UPSTREAM_SHA" = "$MERGE_BASE" ]; then
+            echo "No new upstream commits — skipping."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "New upstream commits found."
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create sync branch
+        if: steps.check.outputs.has_changes == 'true'
+        id: branch
+        run: |
+          BRANCH="sync/upstream-$(date +%F)"
+          git checkout -b "$BRANCH"
+          echo "name=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Merge upstream
+        if: steps.check.outputs.has_changes == 'true'
+        run: |
+          git merge --no-ff upstream/main \
+            -m "chore: merge upstream ks-collab/gpt-trainer-docs @ $(date +%F)" \
+            || true
+          # If there are merge conflicts, stage what we can and note it in the PR body
+          git add -A || true
+
+      - name: Re-apply branding
+        if: steps.check.outputs.has_changes == 'true'
+        run: |
+          # Order matters: fix URLs first so domain names aren't turned into text
+          find . -type f \
+            \( -name "*.md" -o -name "*.mdx" -o -name "*.json" \
+               -o -name "*.yml" -o -name "*.yaml" \
+               -o -name "*.js" -o -name "*.jsx" \
+               -o -name "*.ts" -o -name "*.tsx" \
+               -o -name "*.html" -o -name "*.css" \) \
+            -not -path "./.git/*" \
+            -not -path "./node_modules/*" \
+            -not -path "./build/*" \
+            -not -path "./.github/*" | while read -r f; do
+              # URL replacements
+              sed -i 's|app\.gpt-trainer\.com|app.gptchatbot.it|g' "$f"
+              sed -i 's|gpt-trainer\.com|gptchatbot.it|g'          "$f"
+              # Text replacements (case-sensitive order: capitalized first)
+              sed -i 's/GPT-trainer/GPT Chatbot/g'                  "$f"
+              sed -i 's/gpt-trainer/GPT Chatbot/g'                  "$f"
+            done
+
+      - name: Commit branding changes
+        if: steps.check.outputs.has_changes == 'true'
+        run: |
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: re-apply GPT Chatbot branding after upstream merge"
+          else
+            echo "No branding changes to commit."
+          fi
+
+      - name: Push sync branch
+        if: steps.check.outputs.has_changes == 'true'
+        run: git push origin "${{ steps.branch.outputs.name }}"
+
+      - name: Create Pull Request
+        if: steps.check.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          UPSTREAM_SHA=$(git rev-parse upstream/main)
+          gh pr create \
+            --title "chore: sync upstream @ $(date +%F)" \
+            --body "$(cat <<'EOF'
+          ## Upstream sync
+
+          Automated sync from [ks-collab/gpt-trainer-docs](https://github.com/ks-collab/gpt-trainer-docs) merged into this branch, followed by a branding pass replacing all \`gpt-trainer\` references with **GPT Chatbot**.
+
+          **Upstream SHA:** $UPSTREAM_SHA
+
+          ### Post-merge checklist
+          - [ ] Review API reference diff for new/changed/removed endpoints
+          - [ ] Check for merge conflicts (look for `<<<<<<` markers)
+          - [ ] Verify branding — run `grep -r "gpt-trainer" --include="*.mdx" --include="*.json"` and fix any stragglers
+          - [ ] `mintlify dev` — spot-check locally
+          - [ ] Update `PLAN.md` API tables if endpoints changed
+          EOF
+          )" \
+            --base main \
+            --head "${{ steps.branch.outputs.name }}"
