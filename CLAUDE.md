@@ -37,9 +37,16 @@ Or go to **Actions → Sync Upstream & Rebrand → Run workflow** in the GitHub 
 
 **Scheduled run:** currently set to the 1st of every month at 08:00 UTC. To change the cadence, edit the `cron` field on line 6 of the workflow file.
 
-The workflow opens a PR (`sync/upstream-YYYY-MM-DD`) with a review checklist. After merging, scan for any missed branding with:
+The workflow opens a PR (`sync/upstream-YYYY-MM-DD`). After merging:
+
+1. Scan for missed branding: `grep -r "gpt-trainer" --include="*.mdx" --include="*.json" .`
+2. Check for unresolved merge conflicts: `grep -r "<<<<<" --include="*.mdx" .`
+3. Review the API reference diff for new/changed/removed endpoints — update `mint.json` navigation if new pages were added
+4. Preview with `mintlify dev`
+
+If the upstream remote isn't set up yet:
 ```bash
-grep -r "gpt-trainer" --include="*.mdx" --include="*.json" .
+git remote add upstream https://github.com/ks-collab/gpt-trainer-docs.git
 ```
 
 ## Repository Structure
