@@ -74,7 +74,8 @@ jobs:
             -not -path "./.git/*" \
             -not -path "./node_modules/*" \
             -not -path "./build/*" \
-            -not -path "./.github/*" | while read -r f; do
+            -not -path "./.github/*" \
+            -not -name "CLAUDE.md" | while read -r f; do
               # URL replacements
               sed -i 's|app\.gpt-trainer\.com|app.gptchatbot.it|g' "$f"
               sed -i 's|gpt-trainer\.com|gptchatbot.it|g'          "$f"
