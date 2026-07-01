@@ -1,0 +1,63 @@
+---
+title: "Creating plans and pricing considerations"
+---
+
+In the "Subscriptions" tab of your whitelabel dashboard, you can use the "Create new plan" and "Create new addons" buttons to create paid plans and add-ons once you have created or linked your Stripe account to your app.
+
+If you would like to edit your paid plan or add-on after you have created it, we ask that you do this through Stripe. This is because there are many complications that can arise, especially if there are already users paying for the plan or add-on that you want to change.
+
+<Frame>
+  ![](/images/whitelabel-dash-8.png)
+</Frame>
+
+In your Stripe account, you can edit your Products as needed. As seen in the example above, you can change its name, description, metadata, and feature list(not shown in screenshot). Do not change the Unit label. You can change the integer or boolean value of each metadata row to adjust the limits of your plan. Do not change the names of the rows (e.g. "agents\_count"), as the app relies on those keys to interface with Stripe, and changing them would break the app. If you would like further assistance with editing your Stripe Products and Prices, please contact us.
+
+When editing Prices, please ensure that every price has a lookup key. These keys must end in "plan" or "addon". For example: "monthly\_pro\_plan"; "token\_limit\_addon". Prices created through the dashboard will have these already, but you will need to add these to the prices you create on your own.
+
+## Subscription metadata
+
+It is possible to edit a subscription's limits after creation, in Stripe. Note that in doing so, you will change it for all existing subscribers. Any increases in Message Credits will not reflect until the time of next replenishment, and any decreases will not take away MCs that have already been awarded.
+
+Below are the metadata fields that are available for you to change:
+
+| Field name | Value type | Description |
+| --- | --- | --- |
+| agents\_count | integer (e.g. 5) | The number of agents permitted per chatbot |
+| agent\_variables\_count | int | The number of variables an agent can collect. Note that variable count is totalled across an entire chatbot. For example, 5 agents times 5 variables per agent equals 25 variables total available |
+| agent\_tags\_count | int | The number of tags an agent can assign. Totals are also across the chatbot, like variables |
+| functions\_count | int | The number of functions per agent |
+| message\_credits\_replenish | int | The number of Message Credits replenished at the beginning of every month |
+| message\_credits\_bonus | int | The number of MCs received on signup. Not retroactive |
+| storage\_bytes | int | Number of bytes of storage for datasources |
+| storage\_bytes\_unlimited | boolean (e.g. True) | Whether storage is infinite |
+| context\_token | int | Number of context tokens for datasources in a chatbot |
+| max\_model\_size | int | Max context size of models available to the user |
+| chatbots\_count | int | Max number of chatbots per account |
+| collaborators\_count | int | Max number of collaborators per chatbot |
+| overrides\_enabled | bool | Whether user can access AI supervisor overrides |
+| dashboard | bool | Whether user can view the dashboard |
+| visitor\_tracking | bool | Whether user can view advanced visitor statistics for their chatbot. `dashboard` must be True |
+| gpt\_4\_enabled | bool | Whether user can use advanced AI models (not only GPT-4, but also 4o, etc.) |
+| api\_enabled | bool | Whether user can use the API |
+| webhooks | bool | Whether user can use webhooks |
+| library\_access | bool | Whether the user has the access to the "Chatbot Library" |
+| chatbot\_retrain | bool | Whether user can automatically retrain datasources |
+| watermark\_removal | bool | Whether user can remove the watermark from their bot |
+| chatbot\_profile\_picture | bool | Whether user can set a profile picture for their bot |
+| custom\_domain | bool | Whether user can serve their bot from their own domain |
+| custom\_watermark | bool | Whether user can add a custom watermark. `watermark_removal` must be True |
+| user\_identity\_verification | bool | Whether user can use the identity verification feature |
+| byok\_enabled | bool | Whether user can use their own AI API keys instead of MCs |
+| human\_escalation\_enabled | bool | Whether user can use human escalation in their bot |
+| image\_upload\_enabled | bool | Whether user can upload images as datasources |
+| allow\_chatbot\_transfer | bool | Whether user can transfer their chatbots to other users |
+| chunk\_view\_enabled | bool | Whether user can view and edit the extracted chunks of their datasources directly |
+| source\_tracking\_enabled | bool | Whether user can cite and share datasources directly in their chatbot responses |
+| zapier\_integration | bool | Whether user can connect to your Zapier or Make.com integration. Note: you must publish the integrations first! |
+| meta\_integration | bool | Whether user can connect to their Facebook Messenger, Instagram, or WhatsApp accounts. Note: you must set up your Meta App according to the guide. |
+| sms\_enabled | bool | Whether the user can connect the chatbot to SMS messages on their phone. Note: You must set up the SMS service with Ytel according to their guide. |
+| variables\_table | bool | Give users access to Collected Data tab. This tab displays a detailed view of all data gathered through their chatbot interactions. |
+| voice\_credits\_bonus | int | Number of AI voice credits assigned to the user when the subscription is first purchased. |
+| voice\_credits\_replenish | int | Number of AI voice credits replenished at the beginning of every month. |
+| voice\_enabled | bool | Whether AI voice feature is enabled. |
+| slack\_integration | bool | Whether Slack integration is enabled. |
