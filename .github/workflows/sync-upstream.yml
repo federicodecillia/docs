@@ -104,9 +104,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           UPSTREAM_SHA=$(git rev-parse upstream/main)
-          gh pr create \
-            --title "chore: sync upstream @ $(date +%F)" \
-            --body "$(cat <<'EOF'
+          # `gh pr create` drives a GraphQL mutation that the automatic GITHUB_TOKEN
+          # can't authorize even with PR-creation permissions enabled on the repo
+          # (known gh CLI limitation). The REST endpoint works, so use that instead.
+          BODY=$(cat <<EOF
           ## Upstream sync
 
           Automated sync from [ks-collab/gpt-trainer-docs](https://github.com/ks-collab/gpt-trainer-docs) merged into this branch, followed by a branding pass replacing all \`gpt-trainer\` references with **GPT Chatbot**.
@@ -115,11 +116,13 @@ jobs:
 
           ### Post-merge checklist
           - [ ] Review API reference diff for new/changed/removed endpoints
-          - [ ] Check for merge conflicts (look for `<<<<<<` markers)
-          - [ ] Verify branding — run `grep -r "gpt-trainer" --include="*.mdx" --include="*.json"` and fix any stragglers
-          - [ ] `mintlify dev` — spot-check locally
-          - [ ] Update `PLAN.md` API tables if endpoints changed
+          - [ ] Check for merge conflicts (look for \`<<<<<<\` markers)
+          - [ ] Verify branding — run \`grep -r "gpt-trainer" --include="*.mdx" --include="*.json"\` and fix any stragglers
+          - [ ] \`mintlify dev\` — spot-check locally
           EOF
-          )" \
-            --base main \
-            --head "${{ steps.branch.outputs.name }}"
+          )
+          gh api -X POST "repos/${{ github.repository }}/pulls" \
+            -f title="chore: sync upstream @ $(date +%F)" \
+            -f body="$BODY" \
+            -f head="${{ steps.branch.outputs.name }}" \
+            -f base="main"
