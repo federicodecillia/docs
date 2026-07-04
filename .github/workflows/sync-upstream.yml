@@ -96,13 +96,22 @@ jobs:
 
       - name: Push sync branch
         if: steps.check.outputs.has_changes == 'true'
-        run: git push origin "${{ steps.branch.outputs.name }}"
+        # Force: la branch sync/upstream-<data> è di proprietà del bot; un rerun
+        # nello stesso giorno (o un run precedente fallito dopo il push) la lascia
+        # occupata e il push normale viene rifiutato.
+        run: git push --force origin "${{ steps.branch.outputs.name }}"
 
       - name: Create Pull Request
         if: steps.check.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Se esiste già una PR aperta per questa branch (rerun stesso giorno), non crearne un'altra.
+          EXISTING=$(gh api "repos/${{ github.repository }}/pulls?head=${{ github.repository_owner }}:${{ steps.branch.outputs.name }}&state=open" --jq 'length')
+          if [ "$EXISTING" -gt 0 ]; then
+            echo "PR già aperta per ${{ steps.branch.outputs.name }}, skip."
+            exit 0
+          fi
           UPSTREAM_SHA=$(git rev-parse upstream/main)
           # `gh pr create` drives a GraphQL mutation that the automatic GITHUB_TOKEN
           # can't authorize even with PR-creation permissions enabled on the repo
