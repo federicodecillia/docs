@@ -40,8 +40,16 @@ jobs:
             echo "No new upstream commits — skipping."
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
-            echo "New upstream commits found."
-            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            # whitelabel/ isn't exposed in mint.json nav, so upstream changes scoped
+            # only to that directory are noise for this fork — skip the PR entirely.
+            NON_WHITELABEL=$(git diff --name-only "$MERGE_BASE" upstream/main | grep -v '^whitelabel/' || true)
+            if [ -z "$NON_WHITELABEL" ]; then
+              echo "New upstream commits found, but all changes are whitelabel-only — skipping."
+              echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "New upstream commits found."
+              echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            fi
           fi
 
       - name: Create sync branch
