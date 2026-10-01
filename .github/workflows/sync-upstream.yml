@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
 
@@ -143,3 +144,12 @@ jobs:
             -f body="$BODY" \
             -f head="${{ steps.branch.outputs.name }}" \
             -f base="main"
+
+      - name: Keepalive (prevent 60-day inactivity auto-disable)
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # GitHub disables scheduled workflows after 60 days without repo activity.
+          # Re-enabling via API on each run resets that timer.
+          gh api -X PUT "repos/${{ github.repository }}/actions/workflows/sync-upstream.yml/enable"
